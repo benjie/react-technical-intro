@@ -44,6 +44,9 @@
       .full-code pre {
         margin: 0
       }
+      .remark-slide>.center pre {
+        text-align: left;
+      }
 
       /* ----- BOTS styles ----- */
 
@@ -218,6 +221,10 @@
       .remark-inline-code {
         color: #2B497F
       }
+      .remark-code-line-highlighted,
+      .remark-code-span-highlighted {
+        background-color: #333;
+      }
 
       .zoom-code .remark-code {
         font-size: 1.1em;
@@ -337,6 +344,344 @@ class: bots-is, cover
 
 ### Rapidly develop, deploy and debug powerful web integrations.
 
+---
+
+class: middle
+
+# Content
+
+The bad old days
+
+What is React and how does it fix these problems?
+
+Why React?
+
+view = fn(state)
+for the same input (state, props) will always render EXACTLY the same.
+NO GLOBALS!
+
+one-way data flow
+
+virtual DOM
+
+everything is functional composition
+
+NO DOM QUERYING!
+
+Enforces good habits, no DOM read-write-read-write
+
+components aren't necessarily DOM nodes
+components are state and lifecycle
+
+Isomorphic
+
+move state up the tree
+
+NO INHERITANCE! Use composition.
+
+Separate container/presentational components
+
+Keep as much pure as possible
+
+What's this weird JSX syntax about anyway?
+
+How does it fit together.
+
+Component based.
+
+Controlled components
+(Demo in project with JSONTree of state?)
+
+Lifecycle methods
+
+HOT RELOADING
+
+
+SO YOU'RE CONVERTED!
+Where to next?
+
+https://egghead.io/technologies/react
+
+
+---
+
+class: middle, center
+
+# The Bad Old Days
+
+### Expensive DOM manipulation
+
+### Hard to reason about data flow
+
+### Synchronisation issues: multiple sources of truth
+
+### Turn it off/on again (reload the page)
+
+
+
+---
+
+class: middle, has-code
+
+```js
+// ----- Home View -----
+var HomeView = Backbone.View.extend({
+* template: _.template('<h1>Hello World!</h1>' +
+*   '<p>Random number: <span><%- number %></span> (click for another)</p>' +
+*   '<textarea>Notes...</textarea>'),
+
+  events: {
+    'click p': 'render'
+  },
+
+  randomNumber: function() {
+    return Math.floor(Math.random() * 100) + 1;
+  },
+
+  render: function() {
+*   this.$el.html(this.template({
+*     number: this.randomNumber()
+*   }));
+  }
+});
+```
+
+
+---
+
+class: middle center
+
+## Not so fast!
+
+```js
+  template: _.template('<h1>Hello World!</h1>' +
+    '<p>Random number: <span><%- number %></span> (click for another)</p>' +
+*   '<textarea>Notes...</textarea>'),
+  ...
+  render: function() {
+*   this.$el.html(this.template({
+      number: this.randomNumber()
+    }));
+  }
+```
+
+Calling `render()` overwrites everything, discarding
+our `<textarea>` notes. We should only update the random number `<span>`:
+
+---
+
+class: middle, has-code
+
+```js
+// ----- Home View -----
+var HomeView = Backbone.View.extend({
+  template: _.template('<h1>Hello World!</h1>' +
+    '<p>Random number: <span><%- number %></span> (click for another)</p>' +
+    '<textarea>Notes...</textarea>'),
+
+  events: {
+*   'click p': 'newNumber'
+  },
+
+  randomNumber: function() {
+    return Math.floor(Math.random() * 100) + 1;
+  },
+
+  newNumber: function(e) {
+*   this.$("span").html(this.randomNumber());
+  },
+
+  render: function() {
+    this.$el.html(this.template({
+      number: this.randomNumber()
+    }));
+  }
+});
+```
+
+---
+
+
+class: middle, center
+
+# Seems ok?
+
+It might be until the designer wants a `<div>` instead of a `<p>`
+
+---
+
+class: cover, nightmare
+
+---
+
+class: middle, center
+
+Fine, let's nip this in the bud and give it a special class `_button` so that the tag doesn't matter:
+
+
+---
+
+class: middle, has-code
+
+```js
+// ----- Home View -----
+var HomeView = Backbone.View.extend({
+  template: _.template('<h1>Hello World!</h1>' +
+*   '<p class="_button">Random number:' +
+*     '<span><%- number %></span> (click for another)' +
+    '</p>' +
+    '<textarea>Notes...</textarea>'),
+
+  events: {
+*   'click ._button': 'newNumber'
+  },
+
+  randomNumber: function() {
+    return Math.floor(Math.random() * 100) + 1;
+  },
+
+  newNumber: function(e) {
+*   this.$("._button span").html(this.randomNumber());
+  },
+
+  render: function() {
+    this.$el.html(this.template({
+      number: this.randomNumber()
+    }));
+  }
+});
+```
+
+---
+
+class: middle, center
+
+# Great!
+
+Let's just hope they don't change anything else, because each time they do the code breaks and the tests fail
+
+---
+
+class: middle, center
+
+# Obvious issues
+
+Breaks DRY - changes in one place (template) often require repeating elsewhere (jQuery)
+
+Interactions between various dynamic components become hard to reason about
+
+Unsure what's safe to modify and what isn't
+
+So much code!
+
+---
+
+
+class: middle, center, cover, spaghetti
+
+
+
+
+## ... In all it's brittle and a total nightmare to debug and test
+
+
+---
+
+class: middle, center, brown
+
+# 2. What is React and how does it fix these problems?
+
+---
+
+class: middle, has-code
+
+
+```js
+// Remember this?
+
+var HomeView = Backbone.View.extend({
+  template: _.template('<h1>Hello World!</h1>' +
+    '<p class="_button">Random number:' +
+      '<span><%- number %></span> (click for another)' +
+    '</p>' +
+    '<textarea>Notes...</textarea>'),
+
+  events: {
+    'click ._button': 'newNumber'
+  },
+
+  randomNumber: function() {
+    return Math.floor(Math.random() * 100) + 1;
+  },
+
+  newNumber: function(e) {
+    this.$("._button span").html(this.randomNumber());
+  },
+
+  render: function() {
+    this.$el.html(this.template({
+      number: this.randomNumber()
+    }));
+  }
+});
+```
+
+---
+
+class: middle, has-code
+
+Here it is again, but with React:
+
+```jsx
+const randomNumber = () => Math.floor(Math.random() * 100) + 1;
+
+class HomeView extends React.Component {
+* state = {randomNumber: randomNumber()};
+* newNumber = () => this.setState({randomNumber: randomNumber()});
+  render() {
+    return (
+      <div>
+        <h1>Hello World!</h1>
+*       <p onClick={this.newNumber}>
+*         Random number: {this.state.randomNumber} (click for another)
+        </p>
+        <textarea>Notes...</textarea>
+      </div>
+    );
+  }
+}
+```
+
+---
+
+class: middle, has-code
+
+To be fair, I ought do it in ES5:
+
+```jsx
+const randomNumber = function() {return Math.floor(Math.random() * 100) + 1;}
+
+const HomeView = React.createClass({
+* getInitialState: function() {
+*   return {randomNumber: randomNumber()};
+* },
+  newNumber: function() {
+    this.setState({randomNumber: randomNumber()});
+  },
+  render: function() {
+    return (
+      <div>
+        <h1>Hello World!</h1>
+        <p onClick={this.newNumber`.bind(this)`}>
+          Random number: {this.state.randomNumber} (click for another)
+        </p>
+        <textarea>Notes...</textarea>
+      </div>
+    );
+  }
+});
+```
+
 
 
 ---
@@ -355,7 +700,9 @@ class: middle, center, blue
       var slideshow = remark.create({
         source: (document.getElementById("source").innerHTML).replace(/^<!--|-->$/g, ""),
         slideNumberFormat: function (current, total) { return null },
-        ratio: '4:3'
+        ratio: '4:3',
+        highlightLines: true,
+        highlightSpans: true
       });
     </script>
   </body>

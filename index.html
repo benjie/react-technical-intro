@@ -175,7 +175,7 @@
       }
 
       .spaghetti {
-        background-image: url('images/spaghetti.jpg')
+        background-image: url('images/off-and-on.gif')
       }
 
       .spaghetti h2 {
@@ -362,19 +362,9 @@ class: middle
 3. Tell me more!
 ---
 
-class: middle, center
+class: middle, center, brown
 
-# The Bad Old Days
-
-### Expensive DOM manipulation
-
-### Hard to reason about data flow
-
-### Synchronisation issues: multiple sources of truth
-
-### Turn it off/on again (reload the page)
-
-
+# 1. The bad old days
 
 ---
 
@@ -521,15 +511,17 @@ Let's just hope they don't change anything else, because each time they do the c
 
 class: middle, center
 
-# Obvious issues
+# Issues with the old way
+
+Bug-prone manual DOM manipulation
+
+Synchronisation issues: multiple sources of truth
 
 Breaks DRY - changes in one place (template) often require repeating elsewhere (jQuery)
 
-Interactions between various dynamic components become hard to reason about
+Hard to reason about interactions
 
-Unsure what's safe to modify and what isn't
-
-So much code!
+## And when it goes wrong...
 
 ---
 
@@ -537,9 +529,6 @@ So much code!
 class: middle, center, cover, spaghetti
 
 
-
-
-## ... In all it's brittle and a total nightmare to debug and test
 
 
 ---
@@ -594,7 +583,9 @@ const randomNumber = () => Math.floor(Math.random() * 100) + 1;
 
 class HomeView extends React.Component {
 * state = {randomNumber: randomNumber()};
+
 * newNumber = () => this.setState({randomNumber: randomNumber()});
+
   render() {
     return (
       <div>
@@ -622,9 +613,11 @@ const HomeView = React.createClass({
 * getInitialState: function() {
 *   return {randomNumber: randomNumber()};
 * },
+
   newNumber: function() {
     this.setState({randomNumber: randomNumber()});
   },
+
   render: function() {
     return (
       <div>
@@ -641,29 +634,68 @@ const HomeView = React.createClass({
 
 ---
 
-class: middle, center
+class: center
 
-## Single source of truth
-
-## No synchronisation issues
-
-## Explicit state
-
-## No manual DOM manipulation
+# **React Concepts**
 
 ---
 
-class: middle, center, cover, happy-happy-joy-joy
-
----
-
-class: middle
+class: center
 
 # React Concepts
 
-Consistency: the **same input** (state, props) will produce the **same output**
+**One-way** data flow
+
+<img width="600" src="images/one-way.svg" />
+
+---
+
+class: center
+
+# React Concepts
 
 One-way data flow
+
+Consistency: the **same input** will produce the **same output**
+
+
+---
+
+class: center
+
+# React Concepts
+
+One-way data flow
+
+Consistency: the same input will produce the same output
+
+Lightweight **reusable** components
+
+---
+
+class: center
+
+# React Concepts
+
+One-way data flow
+
+Consistency: the same input will produce the same output
+
+Lightweight reusable components
+
+Virtual DOM - don&apos;t manipulate the DOM; **simply re-render** with awesome performance
+
+---
+
+class: center
+
+# React Concepts
+
+One-way data flow
+
+Consistency: the same input will produce the same output
+
+Lightweight reusable components
 
 Virtual DOM - don&apos;t manipulate the DOM; simply re-render with awesome performance
 
@@ -672,10 +704,14 @@ Virtual DOM - don&apos;t manipulate the DOM; simply re-render with awesome perfo
 (There's a lot more to React than this, but this'll serve as headlines for now)
 ]
 
+---
+
+class: middle, center, cover, happy-happy-joy-joy
+
 
 ---
 
-class: middle
+class: middle, center
 
 # How?
 

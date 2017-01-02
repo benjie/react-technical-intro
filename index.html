@@ -47,13 +47,24 @@
 
       /* ----- BOTS styles ----- */
 
-      .title-page-logo {
-        width: 100px;
-        margin-bottom: 40px;
+      .title-page .react-logo {
+        width: 250px;
+      }
+      h1#react-101 {
+        margin-top: 40px;
       }
 
-      .react-logo {
-        width: 500px;
+      .title-page .bots-logo-container {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        width: 400px;
+        height: 96px;
+        padding: 0 50px 50px 0;
+      }
+
+      .title-page .bots-logo {
+        width: 100%;
       }
 
       body {
@@ -103,13 +114,13 @@
       }
 
       .blue {
-        background: #26B9C4;
+        background: #1177D5;
       }
       .blue h1, .blue h2, .blue h3 {
         color: white
       }
       .blue p {
-        color: #2B497F;
+        color: #a4f0FF;
       }
 
       .blue a {
@@ -125,11 +136,16 @@
         background-repeat: no-repeat !important
       }
 
-      .title-page {
-        padding-right: 320px;
+      .contain {
+        -webkit-background-size: contain !important;
+        -moz-background-size: contain !important;
+        background-size: contain !important;
+        background-position-x: center !important;
+        background-position-y: center !important;
+        background-repeat: no-repeat !important
       }
 
-      .title-page .backbone-image {
+      .backbone-image {
         background-image: url('images/backbone.jpg');
         position: absolute;
         top: 0px;
@@ -140,6 +156,15 @@
 
       .title-page p {
         font-size: 1.4em;
+      }
+
+      .bots-is {
+        background-image: url('images/bots-bg.png');
+      }
+
+      .bots-is h2, .bots-is h3 {
+        color: black;
+        text-shadow: 1px 1px 2px white;
       }
 
       .spaghetti {
@@ -288,14 +313,30 @@
     <script id="source" language="remarkjs"><!--
 
 class: title-page, blue
-<img src='images/bots-logo.png' title='BOTS logo' class='title-page-logo'>
+
+<div>
+<img src='images/react-logo.png' title='React logo' class='react-logo'>
+</div>
+
 # React 101
 
 Benjie Gillam
 
 BOTS.sh
 
-<div class='backbone-image cover'></div>
+<div class='bots-logo-container'>
+<img src='images/bots-full-logo.png' title='BOTS logo' class='bots-logo'>
+</div>
+
+
+---
+
+class: bots-is, cover
+
+## BOTS: online web service automation IDE
+
+### Rapidly develop, deploy and debug powerful web integrations.
+
 
 
 ---

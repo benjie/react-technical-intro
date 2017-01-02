@@ -390,7 +390,7 @@ var HomeView = Backbone.View.extend({
 *   '<textarea>Notes...</textarea>'),
 
   events: {
-    'click p': 'render'
+*   'click p': 'render'
   },
 
   randomNumber: function() {
@@ -416,6 +416,9 @@ class: middle center
   template: _.template('<h1>Hello World!</h1>' +
     '<p>Random number: <span><%- number %></span> (click for another)</p>' +
 *   '<textarea>Notes...</textarea>'),
+  events: {
+*   'click p': 'render'
+  },
   ...
   render: function() {
 *   this.$el.html(this.template({
@@ -991,24 +994,12 @@ class: has-code
 
 # `view = fn(state, props)`
 
-So far this is just a way of rendering an HTML string; let's instead generate a **virtual DOM** tree:
+So far this is just a way of rendering an **HTML string**:
 
 ```js
 *const dom = (tag, attrs, ...children) =>
 * `<${tag}${htmlAttrs(attrs)}>${children.join('')}</${tag}>`;
 ```
----
-
-class: has-code
-
-# `view = fn(state, props)`
-
-So far this is just a way of rendering an HTML string; let's instead generate a **virtual DOM** tree:
-
-```js
-*const dom = (tag, attrs, ...children) => 
-```
-
 ---
 
 class: has-code
@@ -1041,7 +1032,7 @@ const dom = (component, attrs, ...children) => ({
 });
 ```
 
-Now we can either pass a string as `component` (representing a DOM node) or we can **pass another function** (component)
+Now `component` can either be a string (representing a DOM node) or **another function**.
 
 ---
 
@@ -1468,9 +1459,9 @@ class: has-code
 ```
 ```jsx
 //const Page = (props) => (
-// props.user
-// ? LoggedInPage(props)
-// : LoggedOutPage(props)
+//  props.user
+//  ? LoggedInPage(props)
+//  : LoggedOutPage(props)
 //);
 * const Page = (props) => (
 *   props.user
@@ -1524,6 +1515,15 @@ class: has-code
 So far we've dealt with functional components.
 
 If your component needs **state** or **lifecycle methods** then it needs to be a **class component**.
+---
+
+class: has-code
+
+## Class Components
+
+So far we've dealt with functional components.
+
+If your component needs **state** or **lifecycle methods** then it needs to be a **class component**.
 
 
 .aside[
@@ -1539,7 +1539,7 @@ class: has-code
 
 So far we've dealt with functional components.
 
-If your component needs state or lifecycle methods then it needs to be a class component.
+If your component needs **state** or **lifecycle methods** then it needs to be a **class component**.
 
 ```jsx
 // Functional
@@ -1554,7 +1554,7 @@ class: has-code
 
 So far we've dealt with functional components.
 
-If your component needs state or lifecycle methods then it needs to be a class component.
+If your component needs **state** or **lifecycle methods** then it needs to be a **class component**.
 
 ```jsx
 // Functional
@@ -1564,6 +1564,7 @@ const LoggedInPage = ({user}) => (<h1>Hello <UserName user={user} />!</h1>);
 // Class
 class LoggedInPage extends React.Component {
   render() {
+    const {user} = this.props;
     return (<h1>Hello <UserName user={user} />!</h1>);
   }
 }
@@ -1638,10 +1639,40 @@ class: has-code
 class Countdown extends React.Component {
   state = {currentDate: new Date()};
 
-* updateTime = () => this.setState({currentDate: new Date()});
+  updateTime = () => this.setState({currentDate: new Date()});
 
   componentDidMount() {
 *   this.timer = setInterval(this.updateTime, 1000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timer);
+  }
+
+  render() {
+    const seconds = Math.floor((this.props.date - this.state.currentDate) / 1000);
+    return (
+      <span>
+        {seconds} seconds remain until {this.props.date.toISOString()}
+      </span>
+    );
+  }
+}
+```
+---
+
+class: has-code
+
+## Class Components
+
+```jsx
+class Countdown extends React.Component {
+  state = {currentDate: new Date()};
+
+* updateTime = () => this.setState({currentDate: new Date()});
+
+  componentDidMount() {
+    this.timer = setInterval(this.updateTime, 1000);
   }
 
   componentWillUnmount() {

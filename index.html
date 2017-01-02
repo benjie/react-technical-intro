@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>React 101 | BOTS.sh</title>
+    <title>Technical Introduction to React | BOTS.sh</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <style type="text/css">
 
@@ -173,7 +173,7 @@
         background-image: url('images/bots-bg.png');
       }
 
-      .bots-is h2, .bots-is h3 {
+      .bots-is h1, .bots-is h2, .bots-is h3, .bots-is a {
         color: black;
         text-shadow: 1px 1px 2px white;
       }
@@ -334,11 +334,11 @@ class: title-page, blue
 <img src='images/react-logo.png' title='React logo' class='react-logo'>
 </div>
 
-# React 101
+# Technical Introduction to React
 
 Benjie Gillam
 
-BOTS.sh
+[BOTS.sh](https://BOTS.sh)
 
 <div class='bots-logo-container'>
 <img src='images/bots-full-logo.png' title='BOTS logo' class='bots-logo'>
@@ -361,9 +361,17 @@ class: middle
 
 1. The bad old days
 
-2. What is React and how does it fix these problems?
+2. React Concepts
 
-3. Tell me more!
+3. How does React work?
+
+4. But doesn't it have that weird syntax?
+
+5. Class components
+
+6. Props and state
+
+7. Let's rebuild everything?
 ---
 
 class: middle, center, brown
@@ -539,7 +547,7 @@ class: middle, center, cover, spaghetti
 
 class: middle, center, brown
 
-# 2. What is React and how does it fix these problems?
+# 2. React Concepts
 
 ---
 
@@ -772,9 +780,9 @@ class: middle, center, cover, happy-happy-joy-joy
 
 ---
 
-class: middle, center
+class: middle, center, brown
 
-# How?
+# 3. How does React work?
 
 
 ---
@@ -1355,7 +1363,7 @@ other things.
 
 class: middle, center, brown
 
-# 3. But doesn't it have that weird syntax?
+# 4. But doesn't it have that weird syntax?
 
 ---
 
@@ -1498,7 +1506,7 @@ class: has-code
 
 class: middle, center, brown
 
-# 4. Class Components
+# 5. Class components
 ---
 
 class: has-code
@@ -1600,10 +1608,10 @@ class: has-code
 class Countdown extends React.Component {
   state = {currentDate: new Date()};
 
-* updateTime = () => this.setState({currentDate: new Date()});
+  updateTime = () => this.setState({currentDate: new Date()});
 
   componentDidMount() {
-*   this.timer = setInterval(this.updateTime, 1000);
+    this.timer = setInterval(this.updateTime, 1000);
   }
 
   componentWillUnmount() {
@@ -1611,12 +1619,12 @@ class Countdown extends React.Component {
   }
 
   render() {
-    const seconds = Math.floor((this.props.date - this.state.currentDate) / 1000);
-    return (
-      <span>
-        {seconds} seconds remain until {this.props.date.toISOString()}
-      </span>
-    );
+*   const seconds = Math.floor((this.props.date - this.state.currentDate) / 1000);
+*   return (
+*     <span>
+*       {seconds} seconds remain until {this.props.date.toISOString()}
+*     </span>
+*   );
   }
 }
 ```
@@ -1630,14 +1638,14 @@ class: has-code
 class Countdown extends React.Component {
   state = {currentDate: new Date()};
 
-  updateTime = () => this.setState({currentDate: new Date()});
+* updateTime = () => this.setState({currentDate: new Date()});
 
   componentDidMount() {
-    this.timer = setInterval(this.updateTime, 1000);
+*   this.timer = setInterval(this.updateTime, 1000);
   }
 
   componentWillUnmount() {
-*   clearInterval(this.timer);
+    clearInterval(this.timer);
   }
 
   render() {
@@ -1682,9 +1690,39 @@ class Countdown extends React.Component {
 ```
 ---
 
+class: has-code
+
+## Class Components
+
+```jsx
+class Countdown extends React.Component {
+  state = {currentDate: new Date()};
+
+  updateTime = () => this.setState({currentDate: new Date()});
+
+  componentDidMount() {
+    this.timer = setInterval(this.updateTime, 1000);
+  }
+
+  componentWillUnmount() {
+*   clearInterval(this.timer);
+  }
+
+  render() {
+    const seconds = Math.floor((this.props.date - this.state.currentDate) / 1000);
+    return (
+      <span>
+        {seconds} seconds remain until {this.props.date.toISOString()}
+      </span>
+    );
+  }
+}
+```
+---
+
 class: middle, center, brown
 
-# 5. Props and state
+# 6. Props and state
 
 ---
 
@@ -1719,16 +1757,16 @@ class: normal
 
 It's generally best to be state-less; state makes bugs a lot harder to track down.
 
-Local (per-component) state is stored to `this.state`, e.g. `this.state.firstName`.
+Local (per-component) data is stored to `this.state`, e.g. `this.state.firstName`.
 
 When you change `this.state` (by calling `this.setState`), React **automatically re-renders**.
 
 
 ---
 
-class: middle, center
+class: middle, center, brown
 
-# AWESOME!
+# 7. AWESOME!
 
 ## Let's rebuild everything in React!
 
@@ -1775,35 +1813,11 @@ You can embed other things into React.
 **You can migrate to React without having to rebuild everything!**
 
 ---
-
-NO GLOBALS!
-
-one-way data flow
-
-virtual DOM
-
-everything is functional composition
-
-NO DOM QUERYING!
-
-Enforces good habits, no DOM read-write-read-write
-
-components aren't necessarily DOM nodes
-components are state and lifecycle
-
-Isomorphic
-
-move state up the tree
-
-NO INHERITANCE! Use composition.
+Pure Components (speedups)
 
 Separate container/presentational components
 
 Keep as much pure as possible
-
-What's this weird JSX syntax about anyway?
-
-How does it fit together.
 
 Component based.
 
@@ -1813,21 +1827,42 @@ Controlled components
 Lifecycle methods
 
 HOT RELOADING
+---
 
+class: normal
 
-SO YOU'RE CONVERTED!
+## Recap
+
+One-way data flow
+
+Virtual DOM
+
+Reusable Components
+
+Good habits, no unnecessary re-layout
+
+Components aren't necessarily DOM nodes
+
+---
+
+class: normal
+
+## SO YOU'RE CONVERTED!
+
 Where to next?
 
+https://facebook.github.io/react/docs
 https://egghead.io/technologies/react
 
 
+---
 
-class: middle, center, blue
+class: bots-is, cover
 
 # Thank you!
 
 ### If you like playing with new tech that'll make you more productive; we're looking for alpha testers!
-### [bots.sh](https://bots.sh)
+### benjie at [BOTS.sh](https://BOTS.sh)
 
 --></script>
     <script src="remark-latest.min.js">

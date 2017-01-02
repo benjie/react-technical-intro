@@ -104,6 +104,10 @@
 
       }
 
+      .context {
+        filter: grayscale(0.8) opacity(0.8);
+      }
+
       pre + pre {
         margin-top: 0;
       }
@@ -798,6 +802,16 @@ class: has-code
 *const dom = (tag, attrs, ...children) =>
 * `<${tag}${htmlAttrs(attrs)}>${children.join('')}</${tag}>`;
 ```
+---
+
+class: has-code
+
+# `view = fn(state, props)`
+
+```js
+*const dom = (tag, attrs, ...children) =>
+* `<${tag}${htmlAttrs(attrs)}>${children.join('')}</${tag}>`;
+```
 
 REPL:
 ```js
@@ -904,13 +918,438 @@ class: has-code
 
 # `view = fn(state, props)`
 
-Let's improve the syntax. Instead of `dom(tag, attributes, ...children)` we can extend JavaScript's syntax to support HTML natively, and compile down to the previous syntax.
+So far this is just a way of rendering an HTML string; let's instead generate a **virtual DOM** tree:
 
 ---
 
 class: has-code
 
 # `view = fn(state, props)`
+
+So far this is just a way of rendering an HTML string; let's instead generate a **virtual DOM** tree:
+
+```js
+*const dom = (tag, attrs, ...children) =>
+* `<${tag}${htmlAttrs(attrs)}>${children.join('')}</${tag}>`;
+```
+---
+
+class: has-code
+
+# `view = fn(state, props)`
+
+So far this is just a way of rendering an HTML string; let's instead generate a **virtual DOM** tree:
+
+```js
+*const dom = (tag, attrs, ...children) => 
+```
+
+---
+
+class: has-code
+
+# `view = fn(state, props)`
+
+So far this is just a way of rendering an HTML string; let's instead generate a **virtual DOM** tree:
+
+
+```js
+*const dom = (component, attrs, ...children) => ({
+* component: component,
+* props: Object.assign({children: children}, attrs)
+*});
+```
+
+---
+
+class: has-code
+
+# `view = fn(state, props)`
+
+So far this is just a way of rendering an HTML string; let's instead generate a virtual DOM tree:
+
+
+```js
+const dom = (component, attrs, ...children) => ({
+  component: component,
+  props: Object.assign({children: children}, attrs)
+});
+```
+
+Now we can either pass a string as `component` (representing a DOM node) or we can **pass another function** (component)
+
+---
+
+class: has-code
+
+# `view = fn(state, props)`
+
+```js
+*const dom = (component, attrs, ...children) => ({
+* component: component,
+* props: Object.assign({children: children}, attrs)
+*});
+
+const UserName = ({user}) => dom('span', {}, user.name);
+
+//const LoggedInPage = ({user}) => dom('h1', {}, 'Hello ', UserName({user}), '!');
+*const LoggedInPage = ({user}) => dom('h1', {}, 'Hello ', dom(UserName, {user}), '!');
+
+const LoggedOutPage = () => dom('a', {href: '/login'}, 'Please log in!');
+
+const Page = (props) => (
+//props.user ? LoggedInPage(props) : LoggedOutPage(props)
+* props.user ? dom(LoggedInPage, props) : dom(LoggedOutPage, props)
+);
+```
+---
+
+class: has-code
+
+# `view = fn(state, props)`
+
+```js
+> Page({user: {name: 'Benjie'}})
+{ component: [Function: LoggedInPage],
+  props: { children: [], user: { name: 'Benjie' } } }
+```
+---
+
+class: has-code
+
+# `view = fn(state, props)`
+
+```js
+> Page({user: {name: 'Benjie'}})
+*{ component: [Function: LoggedInPage],
+  props: { children: [], user: { name: 'Benjie' } } }
+```
+
+This is called a '**shallow render**'; and it's one of the things that makes the virtual DOM awesome.
+---
+
+class: has-code
+
+# `view = fn(state, props)`
+
+```js
+> Page({user: {name: 'Benjie'}})
+*{ component: [Function: LoggedInPage],
+  props: { children: [], user: { name: 'Benjie' } } }
+```
+
+This is called a 'shallow render'; and it's one of the things that makes the virtual DOM awesome.
+
+For example, you can test the output of `Page` **without invoking** `LoggedInPage`.
+---
+
+class: has-code
+
+# `view = fn(state, props)`
+
+```js
+> Page({user: {name: 'Benjie'}})
+*{ component: [Function: LoggedInPage],
+  props: { children: [], user: { name: 'Benjie' } } }
+```
+
+This is called a 'shallow render'; and it's one of the things that makes the virtual DOM awesome.
+
+For example, you can test the output of `Page` without invoking `LoggedInPage`.
+
+It's also a source of massive speed-ups when you have **pure components** (more on this later).
+
+---
+
+class: has-code
+
+# `view = fn(state, props)`
+
+```js
+> Page({user: {name: 'Benjie'}})
+{ component: [Function: LoggedInPage],
+  props: { children: [], user: { name: 'Benjie' } } }
+> LoggedInPage({ children: [], user: { name: 'Benjie' } })
+{ component: 'h1',
+  props:
+   { children:
+      [ 'Hello ',
+*       { component: [Function: UserName],
+          props: { children: [], user: { name: 'Benjie' } } },
+        '!' ] } }
+```
+---
+
+class: has-code
+
+# `view = fn(state, props)`
+
+```js
+> Page({user: {name: 'Benjie'}})
+{ component: [Function: LoggedInPage],
+  props: { children: [], user: { name: 'Benjie' } } }
+> LoggedInPage({ children: [], user: { name: 'Benjie' } })
+{ component: 'h1',
+  props:
+   { children:
+      [ 'Hello ',
+        { component: [Function: UserName],
+          props: { children: [], user: { name: 'Benjie' } } },
+        '!' ] } }
+> UserName({ children: [], user: { name: 'Benjie' } })
+{ component: 'span', props: { children: [ 'Benjie' ] } }
+```
+---
+
+class: has-code
+
+.context[
+
+```js
+> Page({user: {name: 'Benjie'}})
+{ component: [Function: LoggedInPage],
+  props: { children: [], user: { name: 'Benjie' } } }
+> LoggedInPage({ children: [], user: { name: 'Benjie' } })
+{ component: 'h1',
+  props:
+   { children:
+      [ 'Hello ',
+        { component: [Function: UserName],
+          props: { children: [], user: { name: 'Benjie' } } },
+        '!' ] } }
+> UserName({ children: [], user: { name: 'Benjie' } })
+{ component: 'span', props: { children: [ 'Benjie' ] } }
+```
+]
+
+A **deep render** produces this virtual DOM tree:
+
+```js
+{ component: 'h1',
+  props:
+   { children:
+      [ 'Hello ',
+        { component: 'span', props: { children: [ 'Benjie' ] } },
+        '!' ] } }
+```
+---
+
+class: has-code
+
+.context[
+
+A deep render produces this virtual DOM tree:
+
+```js
+{ component: 'h1',
+  props:
+   { children:
+      [ 'Hello ',
+        { component: 'span', props: { children: [ 'Benjie' ] } },
+        '!' ] } }
+```
+]
+
+**which translates to this HTML:**
+
+```html
+<h1>Hello <span>Benjie</span>!</h1>
+```
+
+
+---
+
+class: has-code
+
+# `view = fn(state, props)`
+
+Now imagine I change the params, so  
+instead of `Page({user: {name: 'Benjie'}})`,  
+we do `Page({user: {name: 'Jof'}})`
+
+---
+
+class: has-code
+
+# `view = fn(state, props)`
+
+```js
+// Before
+{ component: 'h1',
+  props:
+   { children:
+      [ 'Hello ',
+*       { component: 'span', props: { children: [ 'Benjie' ] } },
+        '!' ] } }
+
+// After
+{ component: 'h1',
+  props:
+   { children:
+      [ 'Hello ',
+*       { component: 'span', props: { children: [ 'Jof' ] } },
+        '!' ] } }
+```
+
+---
+
+class: has-code
+
+# `view = fn(state, props)`
+
+```js
+// Before
+{ component: 'h1',
+  props:
+   { children:
+      [ 'Hello ',
+*       { component: 'span', props: { children: [ 'Benjie' ] } },
+        '!' ] } }
+
+// After
+{ component: 'h1',
+  props:
+   { children:
+      [ 'Hello ',
+*       { component: 'span', props: { children: [ 'Jof' ] } },
+        '!' ] } }
+```
+
+This is where React's magic comes in.
+
+---
+
+class: has-code
+
+# `view = fn(state, props)`
+
+Instead of naively re-rendering everything, React **diffs the Virtual
+DOM** and executes only the changes necessary to transform the old
+DOM state into the new one.
+
+---
+
+class: has-code
+
+# `view = fn(state, props)`
+
+Instead of naively re-rendering everything, React diffs the Virtual
+DOM and executes only the changes necessary to transform the old
+DOM state into the new one.
+
+And what's more, it does it **without reading the browser DOM** - so no
+read-write-read-write DOM re-layout bottlenecks!
+
+---
+
+class: has-code
+
+# `view = fn(state, props)`
+
+Instead of naively re-rendering everything, React diffs the Virtual
+DOM and executes only the changes necessary to transform the old
+DOM state into the new one.
+
+And what's more, it does it **without reading the browser DOM** - so no
+read-write-read-write DOM re-layout bottlenecks!
+
+.aside[
+
+(See [Reconciliation](http://facebook.github.io/react/docs/reconciliation.html) in their docs for how they changed an O(n<sup>3</sup>) problem to O(n))
+]
+
+---
+
+class: has-code
+
+# `view = fn(state, props)`
+
+And **this isn't limited to HTML** and the browser! Facebook have split React
+into it's core logic (React) and on top of that you can build a renderer for
+other things.
+
+---
+
+class: has-code
+
+# `view = fn(state, props)`
+
+And this isn't limited to HTML and the browser! Facebook have split React
+into it's core logic (React) and on top of that you can build a renderer for
+other things.
+
+`react-dom` - **HTML rendering** (server and browser)
+
+---
+
+class: has-code
+
+# `view = fn(state, props)`
+
+And this isn't limited to HTML and the browser! Facebook have split React
+into it's core logic (React) and on top of that you can build a renderer for
+other things.
+
+`react-dom` - HTML rendering (server and browser)
+
+`react-native` - **iOS and Android** apps using **native views**
+
+---
+
+class: middle, center, brown
+
+# 3. But doesn't it have that weird syntax?
+
+---
+
+class: has-code
+
+# New Syntax
+
+Instead of writing `dom(component, attributes, ...children)` all over the place, we can **extend JavaScript's syntax** to be more convenient.
+
+---
+
+class: has-code
+
+# New Syntax
+
+Instead of writing `dom(component, attributes, ...children)` all over the place, we can extend JavaScript's syntax to be more convenient.
+
+We call this new syntax **JSX**.
+
+
+---
+
+class: has-code
+
+# New Syntax
+
+Instead of writing `dom(component, attributes, ...children)` all over the place, we can extend JavaScript's syntax to be more convenient.
+
+We call this new syntax JSX.
+
+Using JSX is **optional** - it's just syntactic sugar.
+
+---
+
+class: has-code
+
+# New Syntax
+
+Instead of writing `dom(component, attributes, ...children)` all over the place, we can extend JavaScript's syntax to be more convenient.
+
+We call this new syntax JSX.
+
+Using JSX is optional - it's just syntactic sugar.
+
+## Let's take a look...
+
+---
+
+class: has-code
+
+# JSX
 
 ```jsx
 //const UserName = ({user}) => dom('span', {}, user.name);
@@ -921,7 +1360,7 @@ class: has-code
 
 class: has-code
 
-# `view = fn(state, props)`
+# JSX
 
 ```jsx
   const UserName = ({user}) => (<span>{user.name}</span>);
@@ -934,7 +1373,7 @@ class: has-code
 
 class: has-code
 
-# `view = fn(state, props)`
+# JSX
 
 ```jsx
   const UserName = ({user}) => (<span>{user.name}</span>);
@@ -951,7 +1390,7 @@ class: has-code
 
 class: has-code
 
-# `view = fn(state, props)`
+# JSX
 
 ```jsx
   const UserName = ({user}) => (<span>{user.name}</span>);
@@ -979,7 +1418,7 @@ class: has-code
 
 class: has-code
 
-# `view = fn(state, props)`
+# JSX
 
 ```jsx
   const UserName = ({user}) => (<span>{user.name}</span>);
@@ -998,9 +1437,333 @@ class: has-code
   );
 ```
 
+---
+
+class: middle, center, brown
+
+# 4. Class Components
+---
+
+class: has-code
+
+## Class Components
+
+So far we've dealt with **functional components**.
+
+---
+
+class: has-code
+
+## Class Components
+
+So far we've dealt with functional components.
+
+If your component needs **state** or **lifecycle methods** then it needs to be a **class component**.
+
+
+.aside[
+
+*Or a HOC (higher order component); but let's skip over that for now...
+]
+
+---
+
+class: has-code
+
+## Class Components
+
+So far we've dealt with functional components.
+
+If your component needs state or lifecycle methods then it needs to be a class component.
+
+```jsx
+// Functional
+*const LoggedInPage = ({user}) => (<h1>Hello <UserName user={user} />!</h1>);
+```
+
+---
+
+class: has-code
+
+## Class Components
+
+So far we've dealt with functional components.
+
+If your component needs state or lifecycle methods then it needs to be a class component.
+
+```jsx
+// Functional
+const LoggedInPage = ({user}) => (<h1>Hello <UserName user={user} />!</h1>);
+```
+```jsx
+// Class
+class LoggedInPage extends React.Component {
+  render() {
+    return (<h1>Hello <UserName user={user} />!</h1>);
+  }
+}
+```
+---
+
+class: has-code
+
+## Class Components
+
+```jsx
+class Countdown extends React.Component {
+* state = {currentDate: new Date()};
+
+  updateTime = () => this.setState({currentDate: new Date()});
+
+  componentDidMount() {
+    this.timer = setInterval(this.updateTime, 1000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timer);
+  }
+
+  render() {
+    const seconds = Math.floor((this.props.date - this.state.currentDate) / 1000);
+    return (
+      <span>
+        {seconds} seconds remain until {this.props.date.toISOString()}
+      </span>
+    );
+  }
+}
+```
+---
+
+class: has-code
+
+## Class Components
+
+```jsx
+class Countdown extends React.Component {
+  state = {currentDate: new Date()};
+
+* updateTime = () => this.setState({currentDate: new Date()});
+
+  componentDidMount() {
+*   this.timer = setInterval(this.updateTime, 1000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timer);
+  }
+
+  render() {
+    const seconds = Math.floor((this.props.date - this.state.currentDate) / 1000);
+    return (
+      <span>
+        {seconds} seconds remain until {this.props.date.toISOString()}
+      </span>
+    );
+  }
+}
+```
+---
+
+class: has-code
+
+## Class Components
+
+```jsx
+class Countdown extends React.Component {
+  state = {currentDate: new Date()};
+
+  updateTime = () => this.setState({currentDate: new Date()});
+
+  componentDidMount() {
+    this.timer = setInterval(this.updateTime, 1000);
+  }
+
+  componentWillUnmount() {
+*   clearInterval(this.timer);
+  }
+
+  render() {
+    const seconds = Math.floor((this.props.date - this.state.currentDate) / 1000);
+    return (
+      <span>
+        {seconds} seconds remain until {this.props.date.toISOString()}
+      </span>
+    );
+  }
+}
+```
+---
+
+class: has-code
+
+## Class Components
+
+```jsx
+class Countdown extends React.Component {
+  state = {currentDate: new Date()};
+
+  updateTime = () => this.setState({currentDate: new Date()});
+
+  componentDidMount() {
+    this.timer = setInterval(this.updateTime, 1000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timer);
+  }
+
+  render() {
+*   const seconds = Math.floor((this.props.date - this.state.currentDate) / 1000);
+*   return (
+*     <span>
+*       {seconds} seconds remain until {this.props.date.toISOString()}
+*     </span>
+*   );
+  }
+}
+```
+---
+
+class: middle, center, brown
+
+# 5. Props and state
+
+---
+
+class: middle
+
+## Props
+
+Props are used to pass **external data** to components.
+
+```jsx
+<UserCard
+* fullName='Benjie Gillam'
+* id='1'
+* avatarUrl='https://s.gravatar.com/avatar/9b0431915359b131d88667c6b4078dc7'
+/>
+```
 
 
 ---
+
+class: normal
+
+## State
+
+It's generally **best to be state-less**; state makes bugs a lot harder to track down.
+
+---
+
+class: normal
+
+## State
+
+It's generally best to be state-less; state makes bugs a lot harder to track down.
+
+Local (per-component) state is stored to `this.state`, e.g. `this.state.firstName`.
+
+When you change `this.state` (by calling `this.setState`), React **automatically re-renders**.
+
+
+---
+
+class: middle, center
+
+# AWESOME!
+
+## Let's rebuild everything in React!
+
+---
+
+class: cover, rebuild
+
+#Noooooooo......!!!
+
+---
+
+class: center
+
+# **React is a library**
+
+---
+
+class: center
+
+# React is a library
+
+You can **embed React** into other things.
+
+---
+
+class: center
+
+# React is a library
+
+You can embed React into other things.
+
+You can **embed other things into React**.
+
+---
+
+class: center
+
+# React is a library
+
+You can embed React into other things.
+
+You can embed other things into React.
+
+**You can migrate to React without having to rebuild everything!**
+
+---
+
+NO GLOBALS!
+
+one-way data flow
+
+virtual DOM
+
+everything is functional composition
+
+NO DOM QUERYING!
+
+Enforces good habits, no DOM read-write-read-write
+
+components aren't necessarily DOM nodes
+components are state and lifecycle
+
+Isomorphic
+
+move state up the tree
+
+NO INHERITANCE! Use composition.
+
+Separate container/presentational components
+
+Keep as much pure as possible
+
+What's this weird JSX syntax about anyway?
+
+How does it fit together.
+
+Component based.
+
+Controlled components
+(Demo in project with JSONTree of state?)
+
+Lifecycle methods
+
+HOT RELOADING
+
+
+SO YOU'RE CONVERTED!
+Where to next?
+
+https://egghead.io/technologies/react
+
+
 
 class: middle, center, blue
 

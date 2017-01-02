@@ -588,13 +588,13 @@ const randomNumber = () => Math.floor(Math.random() * 100) + 1;
 class HomeView extends React.Component {
 * state = {randomNumber: randomNumber()};
 
-* newNumber = () => this.setState({randomNumber: randomNumber()});
+  newNumber = () => this.setState({randomNumber: randomNumber()});
 
   render() {
     return (
       <div>
         <h1>Hello World!</h1>
-*       <p onClick={this.newNumber}>
+        <p onClick={this.newNumber}>
 *         Random number: {this.state.randomNumber} (click for another)
         </p>
         <textarea>Notes...</textarea>
@@ -605,6 +605,62 @@ class HomeView extends React.Component {
 ```
 
 ---
+
+class: middle, has-code
+
+Here it is again, but with React:
+
+```jsx
+const randomNumber = () => Math.floor(Math.random() * 100) + 1;
+
+class HomeView extends React.Component {
+  state = {randomNumber: randomNumber()};
+
+* newNumber = () => this.setState({randomNumber: randomNumber()});
+
+  render() {
+    return (
+      <div>
+        <h1>Hello World!</h1>
+*       <p onClick={this.newNumber}>
+          Random number: {this.state.randomNumber} (click for another)
+        </p>
+        <textarea>Notes...</textarea>
+      </div>
+    );
+  }
+}
+```
+
+---
+
+class: middle, has-code
+
+Here it is again, but with React:
+
+```jsx
+const randomNumber = () => Math.floor(Math.random() * 100) + 1;
+
+class HomeView extends React.Component {
+  state = {randomNumber: randomNumber()};
+
+* newNumber = () => this.setState({randomNumber: randomNumber()});
+
+  render() {
+    return (
+      <div>
+        <h1>Hello World!</h1>
+        <p onClick={this.newNumber}>
+*         Random number: {this.state.randomNumber} (click for another)
+        </p>
+        <textarea>Notes...</textarea>
+      </div>
+    );
+  }
+}
+```
+
+<!--
 
 class: middle, has-code
 
@@ -636,6 +692,7 @@ const HomeView = React.createClass({
 });
 ```
 
+-->
 ---
 
 class: center

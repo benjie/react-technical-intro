@@ -50,6 +50,18 @@
 
       /* ----- BOTS styles ----- */
 
+      .toprightgap {
+        position: absolute;
+        bottom: 0px;
+        right: 0px;
+        width: 420px;
+        height: 280px;
+        background-color: rgba(255, 255, 255, 1);
+        box-shadow: 0px 0px 13px rgba(0, 0, 0, 0.6);
+        background-image: url(images/one-way.svg);
+        background-size: 114%;
+        background-position: 50% 50%;
+      }
       #backbone1 h1,
       #backbone2 h1,
       #react1 h1 {
@@ -191,6 +203,10 @@
 
       .bots-is {
         background-image: url('images/bots-bg.png');
+      }
+
+      .hot-reload {
+        background-image: url('images/hot.gif');
       }
 
       .bots-is h1, .bots-is h2, .bots-is h3, .bots-is a {
@@ -385,18 +401,15 @@ class: middle
 # Content
 
 1. The bad old days
-
-2. React Concepts
-
+2. React concepts
 3. How does React work?
-
 4. But doesn't it have that weird syntax?
-
 5. Class components
-
 6. Props and state
-
-7. Let's rebuild everything?
+7. Events / controlled components
+8. Immutability
+9. Hot reloading
+10. Let's rebuild everything?
 ---
 
 class: middle, center, brown
@@ -526,7 +539,7 @@ class: middle, center, cover, spaghetti
 
 class: middle, center, brown
 
-# 2. React Concepts
+# 2. React concepts
 
 ---
 
@@ -687,7 +700,7 @@ class: center
 
 **One-way** data flow
 
-<img width="600" src="images/one-way.svg" />
+<img width="400" src="images/one-way.svg" />
 
 ---
 
@@ -1453,6 +1466,20 @@ class: has-code
     : (<LoggedOutPage />)
   );
 ```
+---
+
+class: normal
+
+## JSX vs HTML oddities:
+
+Case matters: `onClick` not `onclick`
+
+Some attributes are renamed to avoid clashes:  
+`class` → `className`; `for` → `htmlFor`
+
+You have to close tags (think XHTML)
+
+Be explicit: `<table>`**`<tbody>`**`<tr><td>...`
 
 ---
 
@@ -1718,20 +1745,61 @@ class: middle, center, brown
 
 ---
 
-class: middle
+class: normal
 
-## Props
+**Props** are used to pass **external data** to components.
 
-Props are used to pass **external data** to components.
+---
+
+class: normal
+
+**Props** are used to pass **external data** to components.
 
 ```jsx
 <UserCard
-* fullName='Benjie Gillam'
-* id='1'
-* avatarUrl='https://s.gravatar.com/avatar/9b0431915359b131d88667c6b4078dc7'
+* user={{
+    fullName: 'Benjie Gillam',
+    id: 1,
+    avatarUrl: 'https://s.gravatar.com/avatar/9b0431915359b131d88667c6b4078dc7'
+  }}
+* size='small'
 />
 ```
 
+---
+
+class: normal
+
+**Props** are used to pass **external data** to components.
+
+```jsx
+<UserCard
+  user={{
+    fullName: 'Benjie Gillam',
+    id: 1,
+    avatarUrl: 'https://s.gravatar.com/avatar/9b0431915359b131d88667c6b4078dc7'
+  }}
+  size='small'
+/>
+```
+```jsx
+*// Components can then pass (optionally modified) props on to sub-components
+function UserCard({user, size}) {
+  return (
+    <div className='UserCard'>
+*     <Avatar url={user.avatarUrl} small={size === 'small'} />
+*     <UserName user={user}></UserName>
+    </div>
+  );
+}
+```
+
+
+---
+
+class: normal
+
+## **State**
 
 ---
 
@@ -1749,7 +1817,17 @@ class: normal
 
 It's generally best to be state-less; state makes bugs a lot harder to track down.
 
-Local (per-component) data is stored to `this.state`, e.g. `this.state.firstName`.
+**Local data** (per-component) is stored to `this.state`, e.g. `this.state.firstName`.
+
+---
+
+class: normal
+
+## State
+
+It's generally best to be state-less; state makes bugs a lot harder to track down.
+
+Local data (per-component) is stored to `this.state`, e.g. `this.state.firstName`.
 
 When you change `this.state` (by calling `this.setState`), React **automatically re-renders**.
 
@@ -1758,7 +1836,249 @@ When you change `this.state` (by calling `this.setState`), React **automatically
 
 class: middle, center, brown
 
-# 7. AWESOME!
+# 7. Events / controlled components
+
+---
+
+class: middle, center
+
+**Events** are how you **manipulate your state**
+
+<div style='visibility: hidden'>
+<img width="80%" src="images/one-way.svg" />
+</div>
+
+---
+
+class: middle, center
+
+**Events** are how you **manipulate your state**
+
+<div>
+<img width="80%" src="images/one-way.svg" />
+</div>
+
+---
+
+class: has-code
+
+<div class='toprightgap'></div>
+
+```jsx
+*const TodoItem = ({text, onDeleteClick}) => (
+  <div className='TodoItem'>
+    <div className='TodoItem__text'>{text}</div>
+*   <div className='TodoItem__delete' onClick={onDeleteClick}>X</div>
+  </div>
+);
+```
+
+---
+
+class: has-code
+
+<div class='toprightgap'></div>
+
+```jsx
+const TodoItem = ({text, onDeleteClick}) => (
+  <div className='TodoItem'>
+    <div className='TodoItem__text'>{text}</div>
+    <div className='TodoItem__delete' onClick={onDeleteClick}>X</div>
+  </div>
+);
+*const TodoList = ({items, onDeleteItem}) => (
+  <div className='TodoList'>
+    {items.map(
+      ({text, id}) => (
+        <TodoItem
+          key={id}
+          text={text}
+*         onDeleteClick={() => onDeleteItem(id)}
+        />
+      )
+    )}
+  </div>
+);
+```
+---
+
+class: has-code
+
+<div class='toprightgap'></div>
+```jsx
+*const TodoList = ({items, onDeleteItem}) => ( ... );
+class TodoApp extends React.Component {
+  state = {
+    items: [
+      {id: 1, text: 'Convert to React'},
+      {id: 2, text: 'Make Awesome Stuff'}]};
+
+* handleDelete = (id) => {
+*   this.setState({items: this.state.items.filter(item => item.id !== id)});
+* }
+
+  render() {
+    return (
+      <div className='TodoApp'>
+*       <TodoList items={this.state.items} onDeleteItem={this.handleDelete} />
+      </div>
+    );
+  }
+}
+```
+---
+
+class: middle, center
+
+## Controlled Components
+
+To avoid storing implicit state in the DOM.
+---
+
+class: has-code
+
+```jsx
+const TodoList = ({items, onDeleteItem}) => ( ... );
+class TodoApp extends React.Component {
+  state = {
+*   nextItemText: '',
+    items: [
+      {id: 1, text: 'Convert to React'},
+      {id: 2, text: 'Make Awesome Stuff'}]};
+
+  handleDelete = (id) => {
+    this.setState({items: this.state.items.filter(item => item.id !== id)});
+  }
+
+  render() {
+    return (
+      <div className='TodoApp'>
+        <TodoList items={this.state.items} onDeleteItem={this.handleDelete} />
+*       <input
+*         value={this.state.nextItemText}
+*         onChange={e => this.setState({nextItemText: e.target.value})}
+*       />
+      </div>
+    );
+  }
+}
+```
+---
+
+class: has-code
+
+```jsx
+class TodoApp extends React.Component {
+  state = {
+    nextItemText: '',
+    items: [
+      {id: 1, text: 'Convert to React'},
+      {id: 2, text: 'Make Awesome Stuff'}]};
+  handleDelete = (id) => {...}
+* handleKeyPress = (e) => {
+*   if (e.key === 'Enter') {
+*     this.setState({
+*       items: [].concat(this.state.items,
+*                        {id: newId(), text: this.state.nextItemText}),
+*       nextItemText: '',
+*     });
+*   }
+* },
+  render() {
+    return (
+      <div className='TodoApp'>
+        <TodoList items={this.state.items} onDeleteItem={this.handleDelete} />
+        <input
+*         onKeyPress={this.handleKeyPress}
+          value={this.state.nextItemText}
+          onChange={e => this.setState({nextItemText: e.target.value})}
+        />
+      </div>
+    );
+  }
+}
+```
+---
+
+class: middle, center, brown
+
+# 8. Immutability
+
+---
+
+
+## Immutability
+
+A component that only uses immutable data is called a **pure component**.
+
+---
+
+
+## Immutability
+
+A component that only uses immutable data is called a pure component.
+
+By only using immutable data, we can **very quickly** check which props have changed.
+
+---
+
+
+## Immutability
+
+A component that only uses immutable data is called a pure component.
+
+By only using immutable data, we can very quickly check which props have changed.
+
+If none have changed we can **bypass rendering** and reuse the last virtual DOM subtree.
+
+---
+
+
+## Immutability
+
+A component that only uses immutable data is called a pure component.
+
+By only using immutable data, we can very quickly check which props have changed.
+
+If none have changed we can bypass rendering and reuse the last virtual DOM subtree.
+
+This can happen for **every component**!
+
+<!--
+
+class: has-code
+
+## Immutability
+
+```jsx
+class FibonacciNumber extends React.PureComponent {
+  fibonacci(n) {
+    if (n < 1) return 0;
+    if (n == 1) return 1;
+    return this.fibonacci(n - 1) + this.fibonacci(n - 2);
+  }
+  render() {
+    return (
+      <span>{this.fibonacci(this.props.n)}
+    );
+  }
+}
+```
+-->
+---
+
+class: middle, center, brown
+
+# 9. Hot reloading
+---
+
+class: hot-reload, cover
+
+---
+
+class: middle, center, brown
+
+# 10. AWESOME!
 
 ## Let's rebuild everything in React!
 
@@ -1805,21 +2125,6 @@ You can embed other things into React.
 **You can migrate to React without having to rebuild everything!**
 
 ---
-Pure Components (speedups)
-
-Separate container/presentational components
-
-Keep as much pure as possible
-
-Component based.
-
-Controlled components
-(Demo in project with JSONTree of state?)
-
-Lifecycle methods
-
-HOT RELOADING
----
 
 class: normal
 
@@ -1835,6 +2140,7 @@ Good habits, no unnecessary re-layout
 
 Components aren't necessarily DOM nodes
 
+
 ---
 
 class: normal
@@ -1845,6 +2151,7 @@ Where to next?
 
 https://facebook.github.io/react/docs
 https://egghead.io/technologies/react
+
 
 
 ---

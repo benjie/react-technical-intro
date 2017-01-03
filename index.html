@@ -252,6 +252,12 @@
         color: white
       }
 
+      .f5 {
+        border: 2px solid black;
+        border-radius: 5px;
+        padding: 6px 12px;
+      }
+
       .rebuild {
         background-image: url('images/demolition.gif')
       }
@@ -432,7 +438,7 @@ class: middle
 2. React concepts
 3. How does React work?
 4. But doesn't it have that weird syntax?
-5. Class components
+5. Class vs functional components
 6. Props and state
 7. Events / controlled components
 8. Immutability
@@ -446,12 +452,12 @@ class: middle, center, brown
 
 ---
 
-class: middle, has-code
+class: has-code
 
 ```js
 var HomeView = Backbone.View.extend({
   template: _.template('<h1>Hello World!</h1>' +
-*   '<p>Random number: <span><%- number %></span> (click for another)</p>' +
+    '<p>Random number: <span><%- number %></span> (click for another)</p>' +
     '<textarea>Notes...</textarea>'),
 
   events: {
@@ -462,35 +468,63 @@ var HomeView = Backbone.View.extend({
     return Math.floor(Math.random() * 100) + 1;
   },
 
-  render: function() {
+* render: function() {
 *   this.$el.html(this.template({
 *     number: this.randomNumber()
-*   }));
+    }));
   }
 });
 ```
-<div id="backbone1"></div>
-
-
 ---
 
-class: middle center
-
-## Not so fast!
+class: has-code
 
 ```js
+var HomeView = Backbone.View.extend({
   template: _.template('<h1>Hello World!</h1>' +
     '<p>Random number: <span><%- number %></span> (click for another)</p>' +
 *   '<textarea>Notes...</textarea>'),
+
   events: {
-*   'click p': 'render'
+    'click p': 'render'
   },
-  ...
+
+  randomNumber: function() {
+    return Math.floor(Math.random() * 100) + 1;
+  },
+
   render: function() {
 *   this.$el.html(this.template({
       number: this.randomNumber()
     }));
   }
+});
+```
+<div id="backbone1"></div>
+---
+
+class: has-code
+
+```js
+var HomeView = Backbone.View.extend({
+  template: _.template('<h1>Hello World!</h1>' +
+    '<p>Random number: <span><%- number %></span> (click for another)</p>' +
+*   '<textarea>Notes...</textarea>'),
+
+  events: {
+    'click p': 'render'
+  },
+
+  randomNumber: function() {
+    return Math.floor(Math.random() * 100) + 1;
+  },
+
+  render: function() {
+*   this.$el.html(this.template({
+      number: this.randomNumber()
+    }));
+  }
+});
 ```
 
 Calling `render()` overwrites everything, discarding
@@ -504,7 +538,7 @@ class: middle, has-code
 ```js
 var HomeView = Backbone.View.extend({
   template: _.template('<h1>Hello World!</h1>' +
-*   '<p class="_button">Random number:' +
+*   '<p class="_button">Random number: ' +
 *     '<span><%- number %></span> (click for another)' +
     '</p>' +
     '<textarea>Notes...</textarea>'),
@@ -528,40 +562,39 @@ var HomeView = Backbone.View.extend({
 
 ---
 
-class: middle, center
 
-# Great!
-
-Let's just hope no-one changes the template, because each time they do there's a big risk the code will break and the tests fail
-
----
-
-class: cover, nightmare
-
----
-
-
-class: middle, center
+class: center
 
 # Issues with the old way
 
-Bug-prone manual DOM manipulation
+Poorly performing manual DOM manipulation
 
-Synchronisation issues: multiple sources of truth
+Code everything twice - once in the template, and once again updating the DOM (jQuery)
 
-Breaks DRY - changes in one place (template) often require repeating elsewhere (jQuery)
+Not sure if it's safe to edit a template
 
-Hard to reason about interactions
-
-## And when it goes wrong...
+Hard to reason about component interactions
 
 ---
 
 
+class: center
+
+# Issues with the old way
+
+Poorly performing manual DOM manipulation
+
+Code everything twice - once in the template, and once again updating the DOM (jQuery)
+
+Not sure if it's safe to edit a template
+
+Hard to reason about component interactions
+
+## And when it goes wrong... .f5[F5]
+
+---
+
 class: middle, center, cover, spaghetti
-
-
-
 
 ---
 
@@ -810,7 +843,7 @@ class: has-code
 
 # `view = fn(state, props)`
 
-Easy to test: `assertSnapshot(fn({foo: 'bar'}))`
+Consistent / easy to test: `assert.deepEqual(fn({foo: 1}), fn({foo: 1}))`
 
 ---
 
@@ -818,7 +851,7 @@ class: has-code
 
 # `view = fn(state, props)`
 
-Easy to test
+Consistent / easy to test: `assert.deepEqual(fn({foo: 1}), fn({foo: 1}))`
 
 Composable:  
 `fn = (props) => fn1(props.foo, fn2(props.bar))`
@@ -829,25 +862,13 @@ class: has-code
 
 # `view = fn(state, props)`
 
-Easy to test
+Consistent / easy to test: `assert.deepEqual(fn({foo: 1}), fn({foo: 1}))`
 
-Composable
+Composable:  
+`fn = (props) => fn1(props.foo, fn2(props.bar))`
 
-Consistent: `assert.deepEqual(fn({foo: 1}), fn({foo: 1}))`
-
----
-
-class: has-code
-
-# `view = fn(state, props)`
-
-Easy to test
-
-Composable
-
-Consistent
-
-Single source of truth (`props`, `state`)
+Easy to reproduce issues:  
+`fn(badState)`
 
 ---
 
@@ -855,13 +876,13 @@ class: has-code
 
 # `view = fn(state, props)`
 
-Easy to test
+Consistent / easy to test: `assert.deepEqual(fn({foo: 1}), fn({foo: 1}))`
 
-Composable
+Composable:  
+`fn = (props) => fn1(props.foo, fn2(props.bar))`
 
-Consistent
-
-Single source of truth
+Easy to reproduce issues:  
+`fn(badState)`
 
 ## Let's give it a go:
 
@@ -880,6 +901,21 @@ class: has-code
 *const dom = (tag, attrs, ...children) =>
 * `<${tag}${htmlAttrs(attrs)}>${children.join('')}</${tag}>`;
 ```
+---
+
+class: has-code
+
+# `view = fn(state, props)`
+
+```js
+*const dom = (tag, attrs, ...children) =>
+* `<${tag}${htmlAttrs(attrs)}>${children.join('')}</${tag}>`;
+```
+
+.aside[
+
+Note `...children` is an ES2015 feature called **rest parameters** that catches all additional arguments and puts them into an array for you.
+]
 ---
 
 class: has-code
@@ -1012,8 +1048,8 @@ So far this is just a way of rendering an HTML string; let's instead generate a 
 
 
 ```js
-*const dom = (component, attrs, ...children) => ({
-* component: component,
+*const dom = (tag, attrs, ...children) => ({
+* component: tag,
 * props: Object.assign({children: children}, attrs)
 *});
 ```
@@ -1043,6 +1079,8 @@ class: has-code
 # `view = fn(state, props)`
 
 ```js
+//const dom = (tag, attrs, ...children) =>
+//  `<${tag}${htmlAttrs(attrs)}>${children.join('')}</${tag}>`;
 *const dom = (component, attrs, ...children) => ({
 * component: component,
 * props: Object.assign({children: children}, attrs)
@@ -1051,7 +1089,7 @@ class: has-code
 const UserName = ({user}) => dom('span', {}, user.name);
 
 //const LoggedInPage = ({user}) => dom('h1', {}, 'Hello ', UserName({user}), '!');
-*const LoggedInPage = ({user}) => dom('h1', {}, 'Hello ', dom(UserName, {user}), '!');
+*const LoggedInPage = ({user}) => dom('h1', {}, 'Hello ', dom(UserName, {user}), '!')
 
 const LoggedOutPage = () => dom('a', {href: '/login'}, 'Please log in!');
 
@@ -1360,15 +1398,12 @@ class: middle, center, brown
 
 ---
 
-class: has-code
-
 # New Syntax
 
 Instead of writing `dom(component, attributes, ...children)` all over the place, we can **extend JavaScript's syntax** to be more convenient.
 
 ---
 
-class: has-code
 
 # New Syntax
 
@@ -1379,8 +1414,6 @@ We call this new syntax **JSX**.
 
 ---
 
-class: has-code
-
 # New Syntax
 
 Instead of writing `dom(component, attributes, ...children)` all over the place, we can extend JavaScript's syntax to be more convenient.
@@ -1390,8 +1423,6 @@ We call this new syntax JSX.
 Using JSX is **optional** - it's just syntactic sugar.
 
 ---
-
-class: has-code
 
 # New Syntax
 
@@ -1410,36 +1441,6 @@ class: has-code
 # JSX
 
 ```jsx
-//const UserName = ({user}) => dom('span', {}, user.name);
-* const UserName = ({user}) => (<span>{user.name}</span>);
-```
-
----
-
-class: has-code
-
-# JSX
-
-```jsx
-  const UserName = ({user}) => (<span>{user.name}</span>);
-```
-```jsx
-//const LoggedInPage = ({user}) => dom('h1', {}, 'Hello ', UserName({user}), '!');
-* const LoggedInPage = ({user}) => (<h1>Hello <UserName user={user} />!</h1>);
-```
----
-
-class: has-code
-
-# JSX
-
-```jsx
-  const UserName = ({user}) => (<span>{user.name}</span>);
-```
-```jsx
-  const LoggedInPage = ({user}) => (<h1>Hello <UserName user={user} />!</h1>);
-```
-```jsx
 //const LoggedOutPage = () => dom('a', {href: '/login'}, 'Please log in!');
 * const LoggedOutPage = () => (<a href="/login">Please log in!</a>);
 ```
@@ -1450,14 +1451,38 @@ class: has-code
 
 # JSX
 
+.context[
 ```jsx
-  const UserName = ({user}) => (<span>{user.name}</span>);
+//const LoggedOutPage = () => dom('a', {href: '/login'}, 'Please log in!');
+  const LoggedOutPage = () => (<a href="/login">Please log in!</a>);
+```
+]
+
+```jsx
+//const LoggedInPage = ({user}) => dom('h1', {}, 'Hello ', dom(UserName, {user}), '!
+* const LoggedInPage = ({user}) => (<h1>Hello <UserName user={user} />!</h1>);
+```
+
+---
+
+class: has-code
+
+# JSX
+
+.context[
+```jsx
+//const LoggedOutPage = () => dom('a', {href: '/login'}, 'Please log in!');
+  const LoggedOutPage = () => (<a href="/login">Please log in!</a>);
 ```
 ```jsx
+//const LoggedInPage = ({user}) => dom('h1', {}, 'Hello ', dom(UserName, {user}), '!
   const LoggedInPage = ({user}) => (<h1>Hello <UserName user={user} />!</h1>);
 ```
+]
+
 ```jsx
-  const LoggedOutPage = () => (<a href="/login">Please log in!</a>);
+//const UserName = ({user}) => dom('span', null, user.name);
+* const UserName = ({user}) => (<span>{user.name}</span>);
 ```
 ```jsx
 //const Page = (props) => (
@@ -1479,20 +1504,20 @@ class: has-code
 # JSX
 
 ```jsx
-  const UserName = ({user}) => (<span>{user.name}</span>);
+const UserName = ({user}) => (<span>{user.name}</span>);
 ```
 ```jsx
-  const LoggedInPage = ({user}) => (<h1>Hello <UserName user={user} />!</h1>);
+const LoggedInPage = ({user}) => (<h1>Hello <UserName user={user} />!</h1>);
 ```
 ```jsx
-  const LoggedOutPage = () => (<a href="/login">Please log in!</a>);
+const LoggedOutPage = () => (<a href="/login">Please log in!</a>);
 ```
 ```jsx
-  const Page = (props) => (
-    props.user
-    ? (<LoggedInPage user={props.user} />)
-    : (<LoggedOutPage />)
-  );
+const Page = (props) => (
+  props.user
+  ? (<LoggedInPage user={props.user} />)
+  : (<LoggedOutPage />)
+);
 ```
 
 ---
@@ -1502,20 +1527,20 @@ class: has-code
 # JSX
 
 ```jsx
-  const UserName = ({user}) => (<span>{user.name}</span>);
+const UserName = ({user}) => (<span>{user.name}</span>);
 ```
 ```jsx
-  const LoggedInPage = ({user}) => (<h1>Hello <UserName user={user} />!</h1>);
+const LoggedInPage = ({user}) => (<h1>Hello <UserName user={user} />!</h1>);
 ```
 ```jsx
-  const LoggedOutPage = () => (<a href="/login">Please log in!</a>);
+const LoggedOutPage = () => (<a href="/login">Please log in!</a>);
 ```
 ```jsx
-  const Page = (props) => (
-    props.user
-    ? (<LoggedInPage user={props.user} />)
-    : (<LoggedOutPage />)
-  );
+const Page = (props) => (
+  props.user
+  ? (<LoggedInPage user={props.user} />)
+  : (<LoggedOutPage />)
+);
 ```
 
 .aside[
@@ -1541,7 +1566,7 @@ Be explicit: `<table>`**`<tbody>`**`<tr><td>...`
 
 class: middle, center, brown
 
-# 5. Class components
+# 5. Class vs functional components
 ---
 
 class: has-code
@@ -1587,7 +1612,7 @@ If your component needs **state** or **lifecycle methods** then it needs to be a
 
 ```jsx
 // Functional
-*const LoggedInPage = ({user}) => (<h1>Hello <UserName user={user} />!</h1>);
+const LoggedInPage = ({user}) => (<h1>Hello <UserName user={user} />!</h1>);
 ```
 
 ---
@@ -1608,8 +1633,8 @@ const LoggedInPage = ({user}) => (<h1>Hello <UserName user={user} />!</h1>);
 // Class
 class LoggedInPage extends React.Component {
   render() {
-    const {user} = this.props;
-    return (<h1>Hello <UserName user={user} />!</h1>);
+*   const {user} = this.props;
+*   return (<h1>Hello <UserName user={user} />!</h1>);
   }
 }
 ```
@@ -1801,13 +1826,13 @@ class: middle, center, brown
 
 ---
 
-class: normal
+class: normal, has-code
 
 **Props** are used to pass **external data** to components.
 
 ---
 
-class: normal
+class: normal, has-code
 
 **Props** are used to pass **external data** to components.
 
@@ -1824,7 +1849,7 @@ class: normal
 
 ---
 
-class: normal
+class: normal, has-code
 
 **Props** are used to pass **external data** to components.
 
@@ -1898,7 +1923,7 @@ class: middle, center, brown
 
 class: middle, center
 
-**Events** are how you **manipulate your state**
+**Events** are how you **manipulate your data**
 
 <div style='visibility: hidden'>
 <img width="80%" src="images/one-way.svg" />
@@ -1908,7 +1933,7 @@ class: middle, center
 
 class: middle, center
 
-**Events** are how you **manipulate your state**
+**Events** are how you **manipulate your data**
 
 <div>
 <img width="80%" src="images/one-way.svg" />
@@ -1921,10 +1946,10 @@ class: has-code
 <div class='toprightgap'></div>
 
 ```jsx
-*const TodoItem = ({text, onDeleteClick}) => (
+*const TodoItem = ({text, onTrashClick}) => (
   <div className='TodoItem'>
     <div className='TodoItem__text'>{text}</div>
-*   <div className='TodoItem__delete' onClick={onDeleteClick}>X</div>
+*   <div className='TodoItem__trash' onClick={onTrashClick}>X</div>
   </div>
 );
 ```
@@ -1936,10 +1961,10 @@ class: has-code
 <div class='toprightgap'></div>
 
 ```jsx
-const TodoItem = ({text, onDeleteClick}) => (
+const TodoItem = ({text, onTrashClick}) => (
   <div className='TodoItem'>
     <div className='TodoItem__text'>{text}</div>
-    <div className='TodoItem__delete' onClick={onDeleteClick}>X</div>
+    <div className='TodoItem__trash' onClick={onTrashClick}>X</div>
   </div>
 );
 *const TodoList = ({items, onDeleteItem}) => (
@@ -1949,7 +1974,7 @@ const TodoItem = ({text, onDeleteClick}) => (
         <TodoItem
           key={id}
           text={text}
-*         onDeleteClick={() => onDeleteItem(id)}
+*         onTrashClick={(e) => onDeleteItem(id)}
         />
       )
     )}
@@ -1962,16 +1987,16 @@ class: has-code
 
 <div class='toprightgap'></div>
 ```jsx
-*const TodoList = ({items, onDeleteItem}) => ( ... );
+const TodoList = ({items, onDeleteItem}) => (
+// ...  <TodoItem ...
+          onTrashClick={(e) => onDeleteItem(id)}
+// ...  /> ...
 class TodoApp extends React.Component {
-  state = {
-    items: [
-      {id: 1, text: 'Convert to React'},
-      {id: 2, text: 'Make Awesome Stuff'}]};
+  state = {items: getInitialItems()}
 
 * handleDelete = (id) => {
 *   this.setState({items: this.state.items.filter(item => item.id !== id)});
-* }
+  }
 
   render() {
     return (
@@ -1994,17 +2019,10 @@ To avoid storing implicit state in the DOM.
 class: has-code
 
 ```jsx
-const TodoList = ({items, onDeleteItem}) => ( ... );
 class TodoApp extends React.Component {
-  state = {
-*   nextItemText: '',
-    items: [
-      {id: 1, text: 'Convert to React'},
-      {id: 2, text: 'Make Awesome Stuff'}]};
-
-  handleDelete = (id) => {
-    this.setState({items: this.state.items.filter(item => item.id !== id)});
-  }
+  state = {items: getInitialItems(),
+*   nextItemText: ''};
+  handleDelete = (id) => {...}
 
   render() {
     return (
@@ -2025,21 +2043,18 @@ class: has-code
 
 ```jsx
 class TodoApp extends React.Component {
-  state = {
-    nextItemText: '',
-    items: [
-      {id: 1, text: 'Convert to React'},
-      {id: 2, text: 'Make Awesome Stuff'}]};
+  state = {items: getInitialItems(),
+    nextItemText: ''};
   handleDelete = (id) => {...}
-* handleKeyPress = (e) => {
+  handleKeyPress = (e) => {
 *   if (e.key === 'Enter') {
 *     this.setState({
 *       items: [].concat(this.state.items,
-*                        {id: newId(), text: this.state.nextItemText}),
+*         {id: newId(), text: this.state.nextItemText}),
 *       nextItemText: '',
-*     });
-*   }
-* },
+      });
+    }
+  },
   render() {
     return (
       <div className='TodoApp'>
@@ -2060,6 +2075,7 @@ class: middle, center, brown
 
 # 8. Immutability
 
+An immutable object is an object whose state cannot be modified after it is created
 ---
 
 
@@ -2298,7 +2314,7 @@ class: bots-is, cover
       });
       var HomeView2 = Backbone.View.extend({
         template: _.template('<h1>Hello World!</h1>' +
-          '<p class="_button">Random number:' +
+          '<p class="_button">Random number: ' +
             '<span><%- number %></span> (click for another)' +
           '</p>' +
           '<textarea>Notes...</textarea>'),

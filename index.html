@@ -1470,6 +1470,34 @@ class: has-code
     : (<LoggedOutPage />)
   );
 ```
+
+---
+
+class: has-code
+
+# JSX
+
+```jsx
+  const UserName = ({user}) => (<span>{user.name}</span>);
+```
+```jsx
+  const LoggedInPage = ({user}) => (<h1>Hello <UserName user={user} />!</h1>);
+```
+```jsx
+  const LoggedOutPage = () => (<a href="/login">Please log in!</a>);
+```
+```jsx
+  const Page = (props) => (
+    props.user
+    ? (<LoggedInPage user={props.user} />)
+    : (<LoggedOutPage />)
+  );
+```
+
+.aside[
+
+React actually uses `React.createElement(...)` where we used `dom(...)`, but you can see how the JSX syntax compiles down to simple JS.
+]
 ---
 
 class: normal

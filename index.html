@@ -50,6 +50,19 @@
 
       /* ----- BOTS styles ----- */
 
+      #backbone1 h1,
+      #backbone2 h1,
+      #react1 h1 {
+        margin: 10px 0;
+        font-size: 1.2em;
+      }
+      #backbone1 p,
+      #backbone2 p,
+      #react1 p {
+        margin: 10px 0;
+        font-size: 1em;
+      }
+
       .title-page .react-logo {
         width: 250px;
       }
@@ -324,6 +337,11 @@
         color: #5DC744 !important;
       }
     </style>
+    <script src='underscore-min.js'></script>
+    <script src='zepto.min.js'></script>
+    <script src='backbone-min.js'></script>
+    <script src='react.min.js'></script>
+    <script src='react-dom.min.js'></script>
   </head>
   <body>
     <script id="source" language="remarkjs"><!--
@@ -383,11 +401,10 @@ class: middle, center, brown
 class: middle, has-code
 
 ```js
-// ----- Home View -----
 var HomeView = Backbone.View.extend({
-* template: _.template('<h1>Hello World!</h1>' +
+  template: _.template('<h1>Hello World!</h1>' +
 *   '<p>Random number: <span><%- number %></span> (click for another)</p>' +
-*   '<textarea>Notes...</textarea>'),
+    '<textarea>Notes...</textarea>'),
 
   events: {
 *   'click p': 'render'
@@ -404,6 +421,7 @@ var HomeView = Backbone.View.extend({
   }
 });
 ```
+<div id="backbone1"></div>
 
 
 ---
@@ -430,82 +448,27 @@ class: middle center
 Calling `render()` overwrites everything, discarding
 our `<textarea>` notes. We should only update the random number `<span>`:
 
----
-
-class: middle, has-code
-
-```js
-// ----- Home View -----
-var HomeView = Backbone.View.extend({
-  template: _.template('<h1>Hello World!</h1>' +
-    '<p>Random number: <span><%- number %></span> (click for another)</p>' +
-    '<textarea>Notes...</textarea>'),
-
-  events: {
-*   'click p': 'newNumber'
-  },
-
-  randomNumber: function() {
-    return Math.floor(Math.random() * 100) + 1;
-  },
-
-  newNumber: function(e) {
-*   this.$("span").html(this.randomNumber());
-  },
-
-  render: function() {
-    this.$el.html(this.template({
-      number: this.randomNumber()
-    }));
-  }
-});
-```
-
----
-
-
-class: middle, center
-
-# Seems ok?
-
-It might be until the designer wants a `<div>` instead of a `<p>`
-
----
-
-class: cover, nightmare
-
----
-
-class: middle, center
-
-Fine, let's nip this in the bud and give it a special class `_button` so that the tag doesn't matter:
-
 
 ---
 
 class: middle, has-code
 
 ```js
-// ----- Home View -----
 var HomeView = Backbone.View.extend({
   template: _.template('<h1>Hello World!</h1>' +
 *   '<p class="_button">Random number:' +
 *     '<span><%- number %></span> (click for another)' +
     '</p>' +
     '<textarea>Notes...</textarea>'),
-
   events: {
 *   'click ._button': 'newNumber'
   },
-
   randomNumber: function() {
     return Math.floor(Math.random() * 100) + 1;
   },
-
-  newNumber: function(e) {
+* newNumber: function(e) {
 *   this.$("._button span").html(this.randomNumber());
-  },
-
+* },
   render: function() {
     this.$el.html(this.template({
       number: this.randomNumber()
@@ -513,6 +476,7 @@ var HomeView = Backbone.View.extend({
   }
 });
 ```
+<div id="backbone2"></div>
 
 ---
 
@@ -523,6 +487,11 @@ class: middle, center
 Let's just hope they don't change anything else, because each time they do the code breaks and the tests fail
 
 ---
+
+class: cover, nightmare
+
+---
+
 
 class: middle, center
 
@@ -589,18 +558,15 @@ var HomeView = Backbone.View.extend({
 
 ---
 
-class: middle, has-code
+class: has-code
 
 Here it is again, but with React:
 
 ```jsx
 const randomNumber = () => Math.floor(Math.random() * 100) + 1;
-
 class HomeView extends React.Component {
 * state = {randomNumber: randomNumber()};
-
   newNumber = () => this.setState({randomNumber: randomNumber()});
-
   render() {
     return (
       <div>
@@ -617,18 +583,15 @@ class HomeView extends React.Component {
 
 ---
 
-class: middle, has-code
+class: has-code
 
 Here it is again, but with React:
 
 ```jsx
 const randomNumber = () => Math.floor(Math.random() * 100) + 1;
-
 class HomeView extends React.Component {
   state = {randomNumber: randomNumber()};
-
 * newNumber = () => this.setState({randomNumber: randomNumber()});
-
   render() {
     return (
       <div>
@@ -645,18 +608,15 @@ class HomeView extends React.Component {
 
 ---
 
-class: middle, has-code
+class: has-code
 
 Here it is again, but with React:
 
 ```jsx
 const randomNumber = () => Math.floor(Math.random() * 100) + 1;
-
 class HomeView extends React.Component {
   state = {randomNumber: randomNumber()};
-
 * newNumber = () => this.setState({randomNumber: randomNumber()});
-
   render() {
     return (
       <div>
@@ -670,6 +630,7 @@ class HomeView extends React.Component {
   }
 }
 ```
+<div id="react1"></div>
 
 <!--
 
@@ -702,6 +663,7 @@ const HomeView = React.createClass({
   }
 });
 ```
+
 
 -->
 ---
@@ -1906,6 +1868,89 @@ class: bots-is, cover
         highlightLines: true,
         highlightSpans: false // We need ES6 backticks
       });
+      var HomeView = Backbone.View.extend({
+        template: _.template('<h1>Hello World!</h1>' +
+          '<p>Random number: <span><%- number %></span> (click for another)</p>' +
+          '<textarea>Notes...</textarea>'),
+
+        events: {
+          'click p': 'render',
+          'keydown textarea': 'stopPropagation',
+          'keypress textarea': 'stopPropagation',
+        },
+
+        stopPropagation: function(e) {
+          e.stopPropagation();
+        },
+
+        randomNumber: function() {
+          return Math.floor(Math.random() * 100) + 1;
+        },
+
+        render: function() {
+          this.$el.html(this.template({
+            number: this.randomNumber()
+          }));
+        }
+      });
+      var HomeView2 = Backbone.View.extend({
+        template: _.template('<h1>Hello World!</h1>' +
+          '<p class="_button">Random number:' +
+            '<span><%- number %></span> (click for another)' +
+          '</p>' +
+          '<textarea>Notes...</textarea>'),
+        events: {
+          'click ._button': 'newNumber',
+          'keydown textarea': 'stopPropagation',
+          'keypress textarea': 'stopPropagation',
+        },
+        stopPropagation: function(e) {
+          e.stopPropagation();
+        },
+        randomNumber: function() {
+          return Math.floor(Math.random() * 100) + 1;
+        },
+        newNumber: function(e) {
+          this.$("._button span").html(this.randomNumber());
+        },
+        render: function() {
+          this.$el.html(this.template({
+            number: this.randomNumber()
+          }));
+        }
+      });
+      const backbone1 = new HomeView();
+      $("#backbone1").append(backbone1.el);
+      backbone1.render();
+      const backbone2 = new HomeView2();
+      $("#backbone2").append(backbone2.el);
+      backbone2.render();
+      const randomNumber = function() {return Math.floor(Math.random() * 100) + 1;}
+
+      const stopPropagation = (e) => e.stopPropagation();
+
+      const HomeView3 = React.createClass({
+        getInitialState: function() {
+          return {randomNumber: randomNumber()};
+        },
+
+        newNumber: function() {
+          this.setState({randomNumber: randomNumber()});
+        },
+
+        render: function() {
+          return (
+            React.createElement('div', null,
+              React.createElement('h1', null, 'Hello World!'),
+              React.createElement('p', {onClick: this.newNumber.bind(this)},
+                'Random number: ', this.state.randomNumber, ' (click for another)'
+              ),
+              React.createElement('textarea', {onKeyPress: stopPropagation, onKeyDown: stopPropagation}, 'Notes...')
+            )
+          );
+        }
+      });
+      ReactDOM.render(React.createElement(HomeView3), $("#react1")[0]);
     </script>
   </body>
 </html>

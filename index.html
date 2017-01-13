@@ -843,46 +843,20 @@ class: has-code
 
 # `view = fn(state, props)`
 
-Consistent / easy to test: `assert.deepEqual(fn({foo: 1}), fn({foo: 1}))`
+Consistent / easy to test  
+`assert.deepEqual(fn({foo: 1}), fn({foo: 1}))`
 
----
+--
 
-class: has-code
+Composable  
+`fn = (props) => fn1(fn2)(props)`
 
-# `view = fn(state, props)`
+--
 
-Consistent / easy to test: `assert.deepEqual(fn({foo: 1}), fn({foo: 1}))`
-
-Composable:  
-`fn = (props) => fn1(props.foo, fn2(props.bar))`
-
----
-
-class: has-code
-
-# `view = fn(state, props)`
-
-Consistent / easy to test: `assert.deepEqual(fn({foo: 1}), fn({foo: 1}))`
-
-Composable:  
-`fn = (props) => fn1(props.foo, fn2(props.bar))`
-
-Easy to reproduce issues:  
+Easy to reproduce issues  
 `fn(badState)`
 
----
-
-class: has-code
-
-# `view = fn(state, props)`
-
-Consistent / easy to test: `assert.deepEqual(fn({foo: 1}), fn({foo: 1}))`
-
-Composable:  
-`fn = (props) => fn1(props.foo, fn2(props.bar))`
-
-Easy to reproduce issues:  
-`fn(badState)`
+--
 
 ## Let's give it a go:
 

@@ -3,391 +3,7 @@
   <head>
     <title>Technical Introduction to React | BOTS.sh</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <style type="text/css">
-
-      /* ----- Fonts ----- */
-
-      @font-face {
-        font-family: Karla;
-        src: url('fonts/Karla/Karla-Regular.ttf')
-      }
-
-      /* ----- Remark overrides ----- */
-
-      .remark-slide-scaler {
-        -moz-box-shadow: none;
-        -webkit-box-shadow: none;
-        box-shadow: none;
-      }
-
-      .remark-container,
-      .remark-notes-area {
-        background: black;
-      }
-
-      .remark-slide-content {
-        padding: 1em 3em;
-      }
-
-      .remark-slide-content h1 {
-        font-size: 3.5em;
-        line-height: 110%
-      }
-
-      .remark-slide-content h2 {
-        font-size: 2.5em
-      }
-
-      .remark-slide-content.full-code {
-        padding: 0
-      }
-      .full-code pre {
-        margin: 0
-      }
-      .remark-slide>.center pre {
-        text-align: left;
-      }
-
-      /* ----- BOTS styles ----- */
-
-      .toprightgap {
-        position: absolute;
-        bottom: 0px;
-        right: 0px;
-        width: 420px;
-        height: 280px;
-        background-color: rgba(255, 255, 255, 1);
-        box-shadow: 0px 0px 13px rgba(0, 0, 0, 0.6);
-        background-image: url(images/one-way.svg);
-        background-size: 114%;
-        background-position: 50% 50%;
-      }
-
-      .slidesLocation{
-        position: absolute;
-        bottom: 0;
-        right: 30px;
-      }
-
-      .slidesLocation p a {
-        color: white;
-        text-shadow: 1px 1px 2px black;
-      }
-
-      #backbone1 h1,
-      #backbone2 h1,
-      #react1 h1 {
-        margin: 10px 0;
-        font-size: 1.2em;
-      }
-      #backbone1 p,
-      #backbone2 p,
-      #react1 p {
-        font-size: 1em;
-        margin: 5px 0;
-      }
-      #backbone1 textarea,
-      #backbone2 textarea,
-      #react1 textarea {
-        font-size: 1em;
-        height: 1.5em;
-        width: 100%;
-      }
-
-      .title-page .react-logo {
-        width: 250px;
-      }
-      h1#react-101 {
-        margin-top: 40px;
-      }
-
-      .title-page .bots-logo-container {
-        position: absolute;
-        right: 0;
-        bottom: 0;
-        width: 400px;
-        height: 96px;
-        padding: 0 50px 50px 0;
-      }
-
-      .title-page .bots-logo {
-        width: 100%;
-      }
-
-      body {
-        font-family: Futura, 'Trebuchet MS', Arial, sans-serif;
-      }
-      h1, h2, h3, p, ol {
-        font-weight: normal;
-        color: #3d3e56;
-      }
-
-      p, h3 {
-        font-size: 1.8em;
-      }
-
-      ol {
-        font-size: 1.5em;
-      }
-
-
-      a,
-      strong {
-        color: #0e83f1;
-      }
-
-      strong {
-        font-weight: inherit;
-      }
-
-      iframe {
-        width: 100%;
-        height: 100%;
-        border: 2px solid #EBEAEA;
-      }
-
-
-      .aside p {
-        font-size: 1em;
-        color: #ADA7AB
-
-      }
-
-      .context {
-        filter: grayscale(0.8) opacity(0.8);
-      }
-
-      pre + pre {
-        margin-top: 0;
-      }
-
-      /* ----- Template styles ----- */
-
-      .brown {
-        background: #0c74d5;
-      }
-
-      .brown h1,
-      .brown h2,
-      .brown p,
-      .brown .remark-inline-code {
-        color: white
-      }
-
-      .blue {
-        background: #0c74d5;
-      }
-      .blue h1, .blue h2, .blue h3 {
-        color: white
-      }
-      .blue p {
-        color: #a4f0FF;
-      }
-
-      .blue a {
-        color: white;
-      }
-
-      .cover {
-        -webkit-background-size: cover !important;
-        -moz-background-size: cover !important;
-        background-size: cover !important;
-        background-position-x: center !important;
-        background-position-y: center !important;
-        background-repeat: no-repeat !important
-      }
-
-      .contain {
-        -webkit-background-size: contain !important;
-        -moz-background-size: contain !important;
-        background-size: contain !important;
-        background-position-x: center !important;
-        background-position-y: center !important;
-        background-repeat: no-repeat !important
-      }
-
-      .backbone-image {
-        background-image: url('images/backbone.jpg');
-        position: absolute;
-        top: 0px;
-        right: 0px;
-        bottom: 0px;
-        width: 280px;
-      }
-
-      .title-page p {
-        font-size: 1.4em;
-      }
-
-      .bots-is {
-        background-image: url('images/bots-bg.png');
-      }
-
-      .hot-reload {
-        background-image: url('images/hot.gif');
-      }
-
-      .hot-storybook {
-        background-image: url('images/hot-storybook.gif');
-      }
-
-      .bots-is h1, .bots-is h2, .bots-is h3, .bots-is a {
-        color: black;
-        text-shadow: 1px 1px 2px white;
-      }
-
-      .spaghetti {
-        background-image: url('images/off-and-on.gif')
-      }
-
-      .spaghetti h2 {
-        color: white
-      }
-
-      .nightmare {
-        background-image: url('images/nightmare.gif')
-      }
-
-      .nightmare h2 {
-        color: white
-      }
-
-      .f5 {
-        border: 2px solid black;
-        border-radius: 5px;
-        padding: 6px 12px;
-      }
-
-      .rebuild {
-        background-image: url('images/demolition.gif')
-      }
-
-      .rebuild h1 {
-        color: white
-      }
-
-
-      .happy-happy-joy-joy {
-        background-image: url('images/happy.jpg')
-      }
-
-      /* ----- Code ----- */
-
-      .has-code {
-        background: #101010;
-        padding: 0 2em
-      }
-
-      .has-code h1, .has-code h2, .has-code h3, .has-code p {
-        color: #EBEAEA
-      }
-
-      .has-code .remark-inline-code {
-        color: #A4D0DE
-      }
-
-      .remark-code, .remark-inline-code {
-        font-family: Monaco, "Lucida Console", monospace;
-        font-size: 0.8em;
-      }
-      .remark-inline-code {
-        color: #2B497F
-      }
-      .remark-code-line-highlighted,
-      .remark-code-span-highlighted {
-        background-color: #333;
-      }
-
-      .zoom-code .remark-code {
-        font-size: 1.1em;
-      }
-
-      .pull-left {
-        float: left;
-        width: 47%;
-      }
-
-      .pull-right {
-        float: right;
-        width: 47%;
-      }
-
-      .comment, .hljs-title {
-        color: #969896;
-      }
-
-      .hljs-variable, .hljs-attribute, .hljs-tag, .hljs-regexp, .hljs-ruby .constant, .hljs-xml .tag .title, .hljs-xml .pi,
-      .hljs-xml .doctype, .hljs-html .doctype, .hljs-css .id, .hljs-css .class, .hljs-css .pseudo {
-        color: #cc6666;
-      }
-
-      .hljs-number, .hljs-preprocessor, .hljs-built_in, .hljs-literal, .hljs-params, .hljs-constant {
-        color: #de935f;
-      }
-
-
-      .hljs-class, .hljs-ruby .class .title, .hljs-css .rules .attribute {
-        color: #f0c674;
-      }
-
-      .hljs-string, .hljs-value, .hljs-inheritance, .hljs-header, .hljs-ruby .symbol, .hljs-xml .cdata {
-        color: #9CDBA5 !important;
-      }
-
-      .hljs-css .hexcolor {
-        color: #8abeb7;
-      }
-
-      .hljs-function, .hljs-python .decorator, .hljs-python .title, .hljs-ruby .function .title, .hljs-ruby .title .keyword,
-      .hljs-perl .sub, .hljs-javascript .title, .hljs-coffeescript .title,
-      .hljs-default .hljs-subst {
-        color: #81a2be;
-      }
-
-      .hljs-keyword, .hljs-javascript .function {
-        color: #7D8FB0;
-        font-weight: normal !important;
-      }
-
-      .hljs-default .hljs {
-        background: #101010;
-        color: #c5c8c6;
-        font-family: Menlo, Monaco, Consolas, monospace;
-        line-height: 1.5;
-        border: 1px solid #ccc;
-        padding: 0 10px;
-      }
-
-
-      .hljs-default .hljs-tag,
-      .hljs-default .xml .hljs-tag,
-      .hljs-default .hljs-tag .hljs-title,
-      .hljs-default .xml .hljs-tag .hljs-title {
-        color: #66ADC7;
-        font-weight: normal !important;
-      }
-
-      .hljs-default .hljs-title {
-        color: #16BECC;
-        font-weight: normal !important;
-      }
-
-      code, .remark-code {border: none !important}
-
-      .hljs-default .javascript .xml {
-        opacity: 1;
-      }
-
-      code .lolight,
-      code .lolight * {
-        color: #666 !important;
-      }
-
-      code .hilight,
-      code .hilight * {
-        color: #5DC744 !important;
-      }
-    </style>
+    <link rel='stylesheet' href='styles.css' />
     <script src='underscore-min.js'></script>
     <script src='zepto.min.js'></script>
     <script src='backbone-min.js'></script>
@@ -412,6 +28,10 @@ Benjie Gillam
 <div class='bots-logo-container'>
 <img src='images/bots-full-logo.png' title='BOTS logo' class='bots-logo'>
 </div>
+.slidesLocation[
+
+[benjie.github.io/react-technical-intro/](https://benjie.github.io/react-technical-intro/)
+]
 
 
 ---
@@ -426,6 +46,11 @@ class: bots-is, cover
 
 [benjie.github.io/react-technical-intro/](https://benjie.github.io/react-technical-intro/)
 ]
+
+???
+
+Please note the URL at the bottom, so don't worry about jotting down code. Of
+course if you want to follow along on your phone or laptop, please do!
 
 
 ---
@@ -444,6 +69,14 @@ class: middle
 8. Immutability
 9. Hot reloading
 10. Let's rebuild everything?
+
+???
+
+There's a lot to cover.
+
+This is a technical introduction, so it's more about how React works than how
+to use it.
+
 ---
 
 class: middle, center, brown
@@ -474,7 +107,16 @@ var HomeView = Backbone.View.extend({
     }));
   }
 });
+
 ```
+
+???
+
+Here's a Backbone View.
+
+1. Renders template
+2. You click the p; it re-renders the template
+
 ---
 
 class: has-code
@@ -501,6 +143,11 @@ var HomeView = Backbone.View.extend({
 });
 ```
 <div id="backbone1"></div>
+
+???
+
+&lt;Frustrated sigh as our notes are lost&gt;
+
 ---
 
 class: has-code
@@ -560,6 +207,11 @@ var HomeView = Backbone.View.extend({
 ```
 <div id="backbone2"></div>
 
+???
+
+Okay so we can slap classes all over the place, and carefully only update the
+parts that are supposed to change; but...
+
 ---
 
 
@@ -569,9 +221,19 @@ class: center
 
 Poorly performing manual DOM manipulation
 
+???
+
+Maintenance burden
+
+--
+
 Code everything twice - once in the template, and once again updating the DOM (jQuery)
 
+--
+
 Not sure if it's safe to edit a template
+
+--
 
 Hard to reason about component interactions
 
@@ -601,6 +263,10 @@ class: middle, center, cover, spaghetti
 class: middle, center, brown
 
 # 2. React concepts
+
+???
+
+So how does React solve this?
 
 ---
 
@@ -637,6 +303,10 @@ var HomeView = Backbone.View.extend({
 });
 ```
 
+???
+
+Remember this Backbone view we were looking at just now?
+
 ---
 
 class: has-code
@@ -661,6 +331,12 @@ class HomeView extends React.Component {
   }
 }
 ```
+
+???
+
+1st we generate the random number and store it onto our state.
+
+Then we render.
 
 ---
 
@@ -687,6 +363,13 @@ class HomeView extends React.Component {
 }
 ```
 
+???
+
+When someone clicks the p tag, the event listener is called, and it updates the state.
+
+Don't worry, that's not a real inline event listener - React abstracts that
+all away for us in a virtual DOM.
+
 ---
 
 class: has-code
@@ -711,7 +394,78 @@ class HomeView extends React.Component {
   }
 }
 ```
+
+???
+
+As soon as the state is updated, React automatically re-renders its virtual
+DOM for us; but the only thing that actually changed was the number, so
+that's the only bit React updates.
+---
+
+class: has-code
+
+Here it is again, but with React:
+
+```jsx
+const randomNumber = () => Math.floor(Math.random() * 100) + 1;
+class HomeView extends React.Component {
+  state = {randomNumber: randomNumber()};
+  newNumber = () => this.setState({randomNumber: randomNumber()});
+  render() {
+    return (
+      <div>
+        <h1>Hello World!</h1>
+        <p onClick={this.newNumber}>
+          Random number: {this.state.randomNumber} (click for another)
+        </p>
+        <textarea>Notes...</textarea>
+      </div>
+    );
+  }
+}
+```
+
+```js
+*const root = document.getElementById('root');
+*ReactDOM.render(<HomeView />, root);
+```
+
+???
+
+To render it into the browser, we just need these two lines of code
+
+
+
+---
+
+class: has-code
+
+Here it is again, but with React:
+
+```jsx
+const randomNumber = () => Math.floor(Math.random() * 100) + 1;
+class HomeView extends React.Component {
+  state = {randomNumber: randomNumber()};
+  newNumber = () => this.setState({randomNumber: randomNumber()});
+  render() {
+    return (
+      <div>
+        <h1>Hello World!</h1>
+        <p onClick={this.newNumber}>
+          Random number: {this.state.randomNumber} (click for another)
+        </p>
+        <textarea>Notes...</textarea>
+      </div>
+    );
+  }
+}
+```
 <div id="react1"></div>
+
+???
+
+And here it is; you can check the source on GitHub to see I've not done any
+smoke and mirrors!
 
 <!--
 
@@ -763,16 +517,13 @@ class: center
 
 <img width="400" src="images/one-way.svg" />
 
----
+???
 
-class: center
+Data flows down the tree, and events flow back up.
 
-# React Concepts
+Never fetch data from a parent.
 
-One-way data flow
-
-Consistency: the **same input** will produce the **same output**
-
+Never send an event to a child.
 
 ---
 
@@ -782,9 +533,8 @@ class: center
 
 One-way data flow
 
-Consistency: the same input will produce the same output
+Consistency: the **same input** should produce the **same output**
 
-Lightweight **reusable** components
 
 ---
 
@@ -794,11 +544,31 @@ class: center
 
 One-way data flow
 
-Consistency: the same input will produce the same output
+Consistency: the same input should produce the same output
+
+**Lightweight** reusable components
+
+---
+
+class: center
+
+# React Concepts
+
+One-way data flow
+
+Consistency: the same input should produce the same output
 
 Lightweight reusable components
 
-Virtual DOM - don&apos;t manipulate the DOM; **simply re-render** with awesome performance
+Don't mutate, **simply re-render**  
+(virtual DOM → crazy fast)
+
+???
+
+Before single page apps were really a thing, we'd take data on the server
+side, pipe it through a template, and render that to the client. Simple.
+
+React make's it lightning fast (60fps) to do that on the client side.
 
 ---
 
@@ -808,21 +578,17 @@ class: center
 
 One-way data flow
 
-Consistency: the same input will produce the same output
+Consistency: the same input should produce the same output
 
 Lightweight reusable components
 
-Virtual DOM - don&apos;t manipulate the DOM; simply re-render with awesome performance
+Don't mutate, simply re-render  
+(virtual DOM → crazy fast)
 
 .aside[
 
 (There's a lot more to React than this, but this'll serve as headlines for now)
 ]
-
----
-
-class: middle, center, cover, happy-happy-joy-joy
-
 
 ---
 
@@ -835,30 +601,55 @@ class: middle, center, brown
 
 class: has-code
 
-# `view = fn(state, props)`
+# `view = fn(props, state)`
+
+???
+
+It all comes down to this.
+
+Your view is a function of your initial data from the server (props) and
+state that builds up as you use it (e.g. opening/closing modals).
 
 ---
 
 class: has-code
 
-# `view = fn(state, props)`
+# `view = fn(props, state)`
 
 Consistent / easy to test  
 `assert.deepEqual(fn({foo: 1}), fn({foo: 1}))`
+
+???
+
+Consistency: the **same input** should produce the **same output**
 
 --
 
 Composable  
 `fn = (props) => fn1(fn2)(props)`
 
+???
+
+Combine components in powerful ways without subclassing (remember Neil's
+talk, So SOLID Fu, this is the **Open-Closed principle**)
+
 --
 
 Easy to reproduce issues  
 `fn(badState)`
 
+???
+
+Copy the bad props and state and reproduce locally, harks back to
+**consistency** again.
+
 --
 
 ## Let's give it a go:
+
+???
+
+**THIS GETS TECHNICAL; I'll let you know when to tune back in**
 
 <!-- 
 DO NOT USE THIS since it doesn't escape the attributes
@@ -869,17 +660,22 @@ const htmlAttrs = (attrs) => Object.keys(attrs || {}).reduce((memo, attr) => `${
 
 class: has-code
 
-# `view = fn(state, props)`
+# `view = fn(props, state)`
 
 ```js
 *const dom = (tag, attrs, ...children) =>
 * `<${tag}${htmlAttrs(attrs)}>${children.join('')}</${tag}>`;
 ```
+
+???
+
+Here's a function that generates an HTML string.
+
 ---
 
 class: has-code
 
-# `view = fn(state, props)`
+# `view = fn(props, state)`
 
 ```js
 *const dom = (tag, attrs, ...children) =>
@@ -894,7 +690,7 @@ Note `...children` is an ES2015 feature called **rest parameters** that catches 
 
 class: has-code
 
-# `view = fn(state, props)`
+# `view = fn(props, state)`
 
 ```js
 *const dom = (tag, attrs, ...children) =>
@@ -909,11 +705,15 @@ REPL:
 '<a href="/foo">Foo Bar Baz</a>'
 ```
 
+???
+
+I've ran these examples in my REPL so you can see what the functions do.
+
 ---
 
 class: has-code
 
-# `view = fn(state, props)`
+# `view = fn(props, state)`
 
 ```js
 const dom = (tag, attrs, ...children) =>
@@ -932,7 +732,7 @@ REPL:
 
 class: has-code
 
-# `view = fn(state, props)`
+# `view = fn(props, state)`
 
 ```js
 const dom = (tag, attrs, ...children) =>
@@ -953,7 +753,7 @@ REPL:
 
 class: has-code
 
-# `view = fn(state, props)`
+# `view = fn(props, state)`
 
 ```js
 const dom = (tag, attrs, ...children) =>
@@ -972,11 +772,15 @@ REPL:
 '<a href="/login">Please log in!</a>'
 ```
 
+???
+
+Similar to **UserName**
+
 ---
 
 class: has-code
 
-# `view = fn(state, props)`
+# `view = fn(props, state)`
 
 ```js
 const dom = (tag, attrs, ...children) =>
@@ -1004,35 +808,41 @@ const LoggedOutPage = () => dom('a', {href: '/login'}, 'Please log in!');
 
 class: has-code
 
-# `view = fn(state, props)`
+# `view = fn(props, state)`
 
 So far this is just a way of rendering an **HTML string**:
 
 ```js
-*const dom = (tag, attrs, ...children) =>
+const dom = (tag, attrs, ...children) =>
 * `<${tag}${htmlAttrs(attrs)}>${children.join('')}</${tag}>`;
 ```
 ---
 
 class: has-code
 
-# `view = fn(state, props)`
+# `view = fn(props, state)`
 
 So far this is just a way of rendering an HTML string; let's instead generate a **virtual DOM** tree:
 
 
 ```js
-*const dom = (tag, attrs, ...children) => ({
+const dom = (tag, attrs, ...children) => ({
 * component: tag,
 * props: Object.assign({children: children}, attrs)
-*});
+});
 ```
+
+???
+
+... and in fact, there's no need for `tag` to be a string any more...
+
+... so let's rename it to `component`...
 
 ---
 
 class: has-code
 
-# `view = fn(state, props)`
+# `view = fn(props, state)`
 
 So far this is just a way of rendering an HTML string; let's instead generate a virtual DOM tree:
 
@@ -1050,7 +860,7 @@ Now `component` can either be a string (representing a DOM node) or **another fu
 
 class: has-code
 
-# `view = fn(state, props)`
+# `view = fn(props, state)`
 
 ```js
 //const dom = (tag, attrs, ...children) =>
@@ -1072,22 +882,33 @@ const Page = (props) => (
 * props.user ? dom(LoggedInPage, props) : dom(LoggedOutPage, props)
 );
 ```
+
+???
+
+Note **UserName** and **LoggedOutPage** are unchanged.
+
+... Okay, so lets have a go at rendering these again
+
 ---
 
 class: has-code
 
-# `view = fn(state, props)`
+# `view = fn(props, state)`
 
 ```js
 > Page({user: {name: 'Benjie'}})
 { component: [Function: LoggedInPage],
   props: { children: [], user: { name: 'Benjie' } } }
 ```
+
+???
+
+Well... this doesn't look like it has the whole page rendered...
 ---
 
 class: has-code
 
-# `view = fn(state, props)`
+# `view = fn(props, state)`
 
 ```js
 > Page({user: {name: 'Benjie'}})
@@ -1096,11 +917,18 @@ class: has-code
 ```
 
 This is called a '**shallow render**'; and it's one of the things that makes the virtual DOM awesome.
+
+???
+
+←
+
+It renders itself, but not any of its child components, deferring to the runtime (React) to do that.
+
 ---
 
 class: has-code
 
-# `view = fn(state, props)`
+# `view = fn(props, state)`
 
 ```js
 > Page({user: {name: 'Benjie'}})
@@ -1110,12 +938,17 @@ class: has-code
 
 This is called a 'shallow render'; and it's one of the things that makes the virtual DOM awesome.
 
-For example, you can test the output of `Page` **without invoking** `LoggedInPage`.
+For example, you can test the output of `Page` **independent of the output from** `LoggedInPage`.
+
+???
+
+**Unit testing**: test each component, independent of the child components
+
 ---
 
 class: has-code
 
-# `view = fn(state, props)`
+# `view = fn(props, state)`
 
 ```js
 > Page({user: {name: 'Benjie'}})
@@ -1125,21 +958,30 @@ class: has-code
 
 This is called a 'shallow render'; and it's one of the things that makes the virtual DOM awesome.
 
-For example, you can test the output of `Page` without invoking `LoggedInPage`.
+For example, you can test the output of `Page` independent of the output from `LoggedInPage`.
 
 It's also a source of massive speed-ups when you have **pure components** (more on this later).
 
+???
+
+But basically: if you can see it's the **same component** and it has the
+**same props** then there's no need to even invoke it because nothing will
+change.
+
+... Okay, so let's keep rendering down the tree. Next up is to call
+**LoggedInPage** with the given props...
+
 ---
 
 class: has-code
 
-# `view = fn(state, props)`
+# `view = fn(props, state)`
 
 ```js
 > Page({user: {name: 'Benjie'}})
 { component: [Function: LoggedInPage],
   props: { children: [], user: { name: 'Benjie' } } }
-> LoggedInPage({ children: [], user: { name: 'Benjie' } })
+*> LoggedInPage({ children: [], user: { name: 'Benjie' } })
 { component: 'h1',
   props:
    { children:
@@ -1148,11 +990,16 @@ class: has-code
           props: { children: [], user: { name: 'Benjie' } } },
         '!' ] } }
 ```
+
+???
+
+Another shallow render, since this output references **UserName**. Let's keep
+going...
 ---
 
 class: has-code
 
-# `view = fn(state, props)`
+# `view = fn(props, state)`
 
 ```js
 > Page({user: {name: 'Benjie'}})
@@ -1166,9 +1013,14 @@ class: has-code
         { component: [Function: UserName],
           props: { children: [], user: { name: 'Benjie' } } },
         '!' ] } }
-> UserName({ children: [], user: { name: 'Benjie' } })
+*> UserName({ children: [], user: { name: 'Benjie' } })
 { component: 'span', props: { children: [ 'Benjie' ] } }
 ```
+
+???
+
+This time there's no further components, so we're done. Moving all this to the top of the screen...
+**And plugging the results into each other**
 ---
 
 class: has-code
@@ -1202,6 +1054,7 @@ A **deep render** produces this virtual DOM tree:
         { component: 'span', props: { children: [ 'Benjie' ] } },
         '!' ] } }
 ```
+
 ---
 
 class: has-code
@@ -1226,12 +1079,22 @@ A deep render produces this virtual DOM tree:
 <h1>Hello <span>Benjie</span>!</h1>
 ```
 
+???
+
+Don't worry if you didn't follow that 100%, we've effectively derived the
+virtual DOM in about 5 minutes, so that ache in your head is perfectly
+natural.
+
+**For those of you who zoned out for all that code, time to tune back in!**
+
+**Here's the important bit...**
+
 
 ---
 
 class: has-code
 
-# `view = fn(state, props)`
+# `view = fn(props, state)`
 
 Now imagine I change the params, so  
 instead of `Page({user: {name: 'Benjie'}})`,  
@@ -1241,7 +1104,7 @@ we do `Page({user: {name: 'Jof'}})`
 
 class: has-code
 
-# `view = fn(state, props)`
+# `view = fn(props, state)`
 
 ```js
 // Before
@@ -1261,11 +1124,19 @@ class: has-code
         '!' ] } }
 ```
 
+???
+
+At the top is the virtual DOM tree we had before.
+
+And at the bottom is the new one...
+
+They're almost identical, but not quite...
+
 ---
 
 class: has-code
 
-# `view = fn(state, props)`
+# `view = fn(props, state)`
 
 ```js
 // Before
@@ -1287,21 +1158,29 @@ class: has-code
 
 This is where React's magic comes in.
 
+???
+
+This is where React's magic comes in... **(PTO!)**
+
 ---
 
 class: has-code
 
-# `view = fn(state, props)`
+# `view = fn(props, state)`
 
 Instead of naively re-rendering everything, React **diffs the Virtual
 DOM** and executes only the changes necessary to transform the old
 DOM state into the new one.
 
+???
+
+# **←**
+
 ---
 
 class: has-code
 
-# `view = fn(state, props)`
+# `view = fn(props, state)`
 
 Instead of naively re-rendering everything, React diffs the Virtual
 DOM and executes only the changes necessary to transform the old
@@ -1310,29 +1189,12 @@ DOM state into the new one.
 And what's more, it does it **without reading the browser DOM** - so no
 read-write-read-write DOM re-layout bottlenecks!
 
----
-
-class: has-code
-
-# `view = fn(state, props)`
-
-Instead of naively re-rendering everything, React diffs the Virtual
-DOM and executes only the changes necessary to transform the old
-DOM state into the new one.
-
-And what's more, it does it **without reading the browser DOM** - so no
-read-write-read-write DOM re-layout bottlenecks!
-
-.aside[
-
-(See [Reconciliation](http://facebook.github.io/react/docs/reconciliation.html) in their docs for how they changed an O(n<sup>3</sup>) problem to O(n))
-]
 
 ---
 
 class: has-code
 
-# `view = fn(state, props)`
+# `view = fn(props, state)`
 
 And **this isn't limited to HTML** and the browser! Facebook have split React
 into it's core logic (React) and on top of that you can build a renderer for
@@ -1342,7 +1204,7 @@ other things.
 
 class: has-code
 
-# `view = fn(state, props)`
+# `view = fn(props, state)`
 
 And this isn't limited to HTML and the browser! Facebook have split React
 into it's core logic (React) and on top of that you can build a renderer for
@@ -1354,7 +1216,7 @@ other things.
 
 class: has-code
 
-# `view = fn(state, props)`
+# `view = fn(props, state)`
 
 And this isn't limited to HTML and the browser! Facebook have split React
 into it's core logic (React) and on top of that you can build a renderer for
@@ -1363,6 +1225,19 @@ other things.
 `react-dom` - HTML rendering (server and browser)
 
 `react-native` - **iOS and Android** apps using **native views**
+
+--
+
+.aside[
+
+(See [Reconciliation](http://facebook.github.io/react/docs/reconciliation.html) in their docs for how they changed an O(n<sup>3</sup>) problem to O(n))
+]
+
+???
+
+The state of the art algorithms for generating the minimum number of operations to transform one tree into another have a complexity in the order of O(n3).
+
+By settling on a number of heuristics and compromises, React has turned this into O(n)
 
 ---
 
@@ -1374,14 +1249,24 @@ class: middle, center, brown
 
 # New Syntax
 
-Instead of writing `dom(component, attributes, ...children)` all over the place, we can **extend JavaScript's syntax** to be more convenient.
+Remember our `dom(component, attributes, ...children)` method from before?
+
+--
+
+React calls that `React.createElement(component, attributes, ...children)`.
+
+---
+
+# New Syntax
+
+Instead of writing `React.createElement(component, attributes, ...children)` all over the place, we can **extend JavaScript's syntax** to be more convenient.
 
 ---
 
 
 # New Syntax
 
-Instead of writing `dom(component, attributes, ...children)` all over the place, we can extend JavaScript's syntax to be more convenient.
+Instead of writing `React.createElement(component, attributes, ...children)` all over the place, we can extend JavaScript's syntax to be more convenient.
 
 We call this new syntax **JSX**.
 
@@ -1390,7 +1275,7 @@ We call this new syntax **JSX**.
 
 # New Syntax
 
-Instead of writing `dom(component, attributes, ...children)` all over the place, we can extend JavaScript's syntax to be more convenient.
+Instead of writing `React.createElement(component, attributes, ...children)` all over the place, we can extend JavaScript's syntax to be more convenient.
 
 We call this new syntax JSX.
 
@@ -1400,7 +1285,7 @@ Using JSX is **optional** - it's just syntactic sugar.
 
 # New Syntax
 
-Instead of writing `dom(component, attributes, ...children)` all over the place, we can extend JavaScript's syntax to be more convenient.
+Instead of writing `React.createElement(component, attributes, ...children)` all over the place, we can extend JavaScript's syntax to be more convenient.
 
 We call this new syntax JSX.
 
@@ -1418,6 +1303,11 @@ class: has-code
 //const LoggedOutPage = () => dom('a', {href: '/login'}, 'Please log in!');
 * const LoggedOutPage = () => (<a href="/login">Please log in!</a>);
 ```
+
+???
+
+I've left these examples as `dom` just so they fit on the page, mentally
+replace them with `React.createElement`
 
 ---
 
@@ -1494,33 +1384,11 @@ const Page = (props) => (
 );
 ```
 
----
+???
 
-class: has-code
+So here it all is, nice and tidy. The brackets are optional, but I prefer to
+keep them in.
 
-# JSX
-
-```jsx
-const UserName = ({user}) => (<span>{user.name}</span>);
-```
-```jsx
-const LoggedInPage = ({user}) => (<h1>Hello <UserName user={user} />!</h1>);
-```
-```jsx
-const LoggedOutPage = () => (<a href="/login">Please log in!</a>);
-```
-```jsx
-const Page = (props) => (
-  props.user
-  ? (<LoggedInPage user={props.user} />)
-  : (<LoggedOutPage />)
-);
-```
-
-.aside[
-
-React actually uses `React.createElement(...)` where we used `dom(...)`, but you can see how the JSX syntax compiles down to simple JS.
-]
 ---
 
 class: normal

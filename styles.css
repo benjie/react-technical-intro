@@ -1,0 +1,386 @@
+/* ----- Fonts ----- */
+
+@font-face {
+  font-family: Karla;
+  src: url('fonts/Karla/Karla-Regular.ttf')
+}
+
+/* ----- Remark overrides ----- */
+
+.remark-slide-scaler {
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+.remark-container,
+.remark-notes-area {
+  background: black;
+}
+
+.remark-slide-content {
+  padding: 1em 3em;
+}
+
+.remark-slide-content h1 {
+  font-size: 3.5em;
+  line-height: 110%
+}
+
+.remark-slide-content h2 {
+  font-size: 2.5em
+}
+
+.remark-slide-content.full-code {
+  padding: 0
+}
+.full-code pre {
+  margin: 0
+}
+.remark-slide>.center pre {
+  text-align: left;
+}
+
+/* ----- BOTS styles ----- */
+
+.toprightgap {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  width: 420px;
+  height: 280px;
+  background-color: rgba(255, 255, 255, 1);
+  box-shadow: 0px 0px 13px rgba(0, 0, 0, 0.6);
+  background-image: url(images/one-way.svg);
+  background-size: 114%;
+  background-position: 50% 50%;
+}
+
+.slidesLocation{
+  position: absolute;
+  bottom: 0;
+  right: 30px;
+}
+
+.slidesLocation p a {
+  color: white;
+  text-shadow: 1px 1px 2px black;
+}
+
+#backbone1 h1,
+#backbone2 h1,
+#react1 h1 {
+  margin: 10px 0;
+  font-size: 1.2em;
+}
+#backbone1 p,
+#backbone2 p,
+#react1 p {
+  font-size: 1em;
+  margin: 5px 0;
+}
+#backbone1 textarea,
+#backbone2 textarea,
+#react1 textarea {
+  font-size: 1em;
+  height: 1.5em;
+  width: 100%;
+}
+
+.title-page .react-logo {
+  width: 250px;
+}
+h1#react-101 {
+  margin-top: 40px;
+}
+
+.title-page .bots-logo-container {
+  position: absolute;
+  right: 0;
+  bottom: 30px;
+  width: 400px;
+  height: 96px;
+  padding: 0 50px 50px 0;
+}
+
+.title-page .bots-logo {
+  width: 100%;
+}
+
+body {
+  font-family: Futura, 'Trebuchet MS', Arial, sans-serif;
+}
+h1, h2, h3, p, ol {
+  font-weight: normal;
+  color: #3d3e56;
+}
+
+p, h3 {
+  font-size: 1.8em;
+}
+
+ol {
+  font-size: 1.5em;
+}
+
+
+a,
+strong {
+  color: #0e83f1;
+}
+
+strong {
+  font-weight: inherit;
+}
+
+iframe {
+  width: 100%;
+  height: 100%;
+  border: 2px solid #EBEAEA;
+}
+
+
+.aside p {
+  font-size: 1em;
+  color: #ADA7AB
+
+}
+
+.context {
+  filter: grayscale(0.8) opacity(0.8);
+}
+
+pre + pre {
+  margin-top: 0;
+}
+
+/* ----- Template styles ----- */
+
+.brown {
+  background: #0c74d5;
+}
+
+.brown h1,
+.brown h2,
+.brown p,
+.brown .remark-inline-code {
+  color: white
+}
+
+.blue {
+  background: #0c74d5;
+}
+.blue h1, .blue h2, .blue h3 {
+  color: white
+}
+.blue p {
+  color: #a4f0FF;
+}
+
+.blue a {
+  color: white;
+}
+
+.cover {
+  -webkit-background-size: cover !important;
+  -moz-background-size: cover !important;
+  background-size: cover !important;
+  background-position-x: center !important;
+  background-position-y: center !important;
+  background-repeat: no-repeat !important
+}
+
+.contain {
+  -webkit-background-size: contain !important;
+  -moz-background-size: contain !important;
+  background-size: contain !important;
+  background-position-x: center !important;
+  background-position-y: center !important;
+  background-repeat: no-repeat !important
+}
+
+.backbone-image {
+  background-image: url('images/backbone.jpg');
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  width: 280px;
+}
+
+.title-page p {
+  font-size: 1.4em;
+}
+
+.bots-is {
+  background-image: url('images/bots-bg.png');
+}
+
+.hot-reload {
+  background-image: url('images/hot.gif');
+}
+
+.hot-storybook {
+  background-image: url('images/hot-storybook.gif');
+}
+
+.bots-is h1, .bots-is h2, .bots-is h3, .bots-is a {
+  color: black;
+  text-shadow: 1px 1px 2px white;
+}
+
+.spaghetti {
+  background-image: url('images/off-and-on.gif')
+}
+
+.spaghetti h2 {
+  color: white
+}
+
+.nightmare {
+  background-image: url('images/nightmare.gif')
+}
+
+.nightmare h2 {
+  color: white
+}
+
+.f5 {
+  border: 2px solid black;
+  border-radius: 5px;
+  padding: 6px 12px;
+}
+
+.rebuild {
+  background-image: url('images/demolition.gif')
+}
+
+.rebuild h1 {
+  color: white
+}
+
+
+.happy-happy-joy-joy {
+  background-image: url('images/happy.jpg')
+}
+
+/* ----- Code ----- */
+
+.has-code {
+  background: #101010;
+  padding: 0 2em
+}
+
+.has-code h1, .has-code h2, .has-code h3, .has-code p {
+  color: #EBEAEA
+}
+
+.has-code .remark-inline-code {
+  color: #A4D0DE
+}
+
+.remark-code, .remark-inline-code {
+  font-family: Monaco, "Lucida Console", monospace;
+  font-size: 0.8em;
+}
+.remark-inline-code {
+  color: #2B497F
+}
+.remark-code-line-highlighted,
+.remark-code-span-highlighted {
+  background-color: #333;
+  border-left: 10px solid white;
+  border-right: 10px solid white;
+  margin: 0 -10px;
+  border-image: linear-gradient(to right, #ccc, #333, #333, #ccc) 1 40%;
+}
+
+.zoom-code .remark-code {
+  font-size: 1.1em;
+}
+
+.pull-left {
+  float: left;
+  width: 47%;
+}
+
+.pull-right {
+  float: right;
+  width: 47%;
+}
+
+.comment, .hljs-title {
+  color: #969896;
+}
+
+.hljs-variable, .hljs-attribute, .hljs-tag, .hljs-regexp, .hljs-ruby .constant, .hljs-xml .tag .title, .hljs-xml .pi,
+.hljs-xml .doctype, .hljs-html .doctype, .hljs-css .id, .hljs-css .class, .hljs-css .pseudo {
+  color: #cc6666;
+}
+
+.hljs-number, .hljs-preprocessor, .hljs-built_in, .hljs-literal, .hljs-params, .hljs-constant {
+  color: #de935f;
+}
+
+
+.hljs-class, .hljs-ruby .class .title, .hljs-css .rules .attribute {
+  color: #f0c674;
+}
+
+.hljs-string, .hljs-value, .hljs-inheritance, .hljs-header, .hljs-ruby .symbol, .hljs-xml .cdata {
+  color: #9CDBA5 !important;
+}
+
+.hljs-css .hexcolor {
+  color: #8abeb7;
+}
+
+.hljs-function, .hljs-python .decorator, .hljs-python .title, .hljs-ruby .function .title, .hljs-ruby .title .keyword,
+.hljs-perl .sub, .hljs-javascript .title, .hljs-coffeescript .title,
+.hljs-default .hljs-subst {
+  color: #81a2be;
+}
+
+.hljs-keyword, .hljs-javascript .function {
+  color: #7D8FB0;
+  font-weight: normal !important;
+}
+
+.hljs-default .hljs {
+  background: #101010;
+  color: #c5c8c6;
+  font-family: Menlo, Monaco, Consolas, monospace;
+  line-height: 1.5;
+  border: 1px solid #ccc;
+  padding: 0 10px;
+}
+
+
+.hljs-default .hljs-tag,
+.hljs-default .xml .hljs-tag,
+.hljs-default .hljs-tag .hljs-title,
+.hljs-default .xml .hljs-tag .hljs-title {
+  color: #66ADC7;
+  font-weight: normal !important;
+}
+
+.hljs-default .hljs-title {
+  color: #16BECC;
+  font-weight: normal !important;
+}
+
+code, .remark-code {border: none !important}
+
+.hljs-default .javascript .xml {
+  opacity: 1;
+}
+
+code .lolight,
+code .lolight * {
+  color: #666 !important;
+}
+
+code .hilight,
+code .hilight * {
+  color: #5DC744 !important;
+}

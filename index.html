@@ -1821,8 +1821,6 @@ class: middle, center
 
 class: has-code
 
-<div class='toprightgap'></div>
-
 ```jsx
 *const TodoItem = ({text, onTrashClick}) => (
   <div className='TodoItem'>
@@ -1835,8 +1833,6 @@ class: has-code
 ---
 
 class: has-code
-
-<div class='toprightgap'></div>
 
 ```jsx
 const TodoItem = ({text, onTrashClick}) => (
@@ -1863,12 +1859,17 @@ const TodoItem = ({text, onTrashClick}) => (
 
 class: has-code
 
-<div class='toprightgap'></div>
 ```jsx
+const TodoItem = ({text, onTrashClick}) => (
+  // ...  <div ...
+  onClick={onTrashClick}
+  // ...  >X</div> ...
+);
 const TodoList = ({items, onDeleteItem}) => (
-// ...  <TodoItem ...
+  // ...  <TodoItem ...
           onTrashClick={(e) => onDeleteItem(id)}
-// ...  /> ...
+  // ...  /> ...
+);
 class TodoApp extends React.Component {
   state = {items: getInitialItems()}
 

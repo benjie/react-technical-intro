@@ -1417,6 +1417,10 @@ class: has-code
 
 So far we've dealt with **functional components**.
 
+???
+
+So called because they're components that are simply functions.
+
 ---
 
 class: has-code
@@ -1426,6 +1430,12 @@ class: has-code
 So far we've dealt with functional components.
 
 If your component needs **state** or **lifecycle methods** then it needs to be a **class component**.
+
+???
+
+For example if it needs to store local data, or if it needs to do something
+when it's added/removed (e.g. render Google Maps)
+
 ---
 
 class: has-code
@@ -1510,6 +1520,15 @@ class Countdown extends React.Component {
   }
 }
 ```
+
+???
+
+If render depended on the current date directly then every time we called it,
+it would output different data.
+
+Instead we store a snapshot of the current date so that every render will
+return the same result until we update the date.
+
 ---
 
 class: has-code
@@ -1540,6 +1559,11 @@ class Countdown extends React.Component {
   }
 }
 ```
+
+???
+
+Now we calculate the remaining time in seconds and render it.
+
 ---
 
 class: has-code
@@ -1570,6 +1594,10 @@ class Countdown extends React.Component {
   }
 }
 ```
+
+???
+
+Now the initial render is complete the HTML has been written to the browser and we can set up a timer to update our date snapshot every second.
 ---
 
 class: has-code
@@ -1660,6 +1688,10 @@ class Countdown extends React.Component {
   }
 }
 ```
+
+???
+
+Finally we clean up after ourselves: clearing the timer when we unmount the component.
 ---
 
 class: middle, center, brown
@@ -1671,6 +1703,10 @@ class: middle, center, brown
 class: normal, has-code
 
 **Props** are used to pass **external data** to components.
+
+???
+
+... This can be from one component to the next, or directly in at the root node.
 
 ---
 

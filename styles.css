@@ -41,6 +41,20 @@
   text-align: left;
 }
 
+.remark-notes-preview h1,
+.remark-notes-preview h2,
+.remark-notes-preview h3,
+.remark-notes-preview p,
+.remark-notes-preview ol,
+.remark-notes h1,
+.remark-notes h2,
+.remark-notes h3,
+.remark-notes p,
+.remark-notes ol {
+  color: white;
+}
+
+
 /* ----- BOTS styles ----- */
 
 .toprightgap {
@@ -110,6 +124,7 @@ h1#react-101 {
 body {
   font-family: Futura, 'Trebuchet MS', Arial, sans-serif;
 }
+
 h1, h2, h3, p, ol {
   font-weight: normal;
   color: #3d3e56;

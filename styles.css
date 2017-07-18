@@ -81,8 +81,8 @@
 }
 
 .slidesLocation p a {
-  color: white;
-  text-shadow: 1px 1px 2px black;
+  color: black;
+  text-shadow: 1px 1px 2px transparent;
 }
 
 .slidesLocation.onWhite p a {
@@ -117,20 +117,20 @@ h1#react-101 {
   margin-top: 40px;
 }
 
-.title-page .bots-logo-container {
+.title-page .postgraphql-logo-container {
   position: absolute;
   right: 0;
   bottom: 30px;
-  width: 400px;
-  height: 96px;
+  width: 200px;
+  height: 200px;
   padding: 0 50px 50px 0;
 }
 
-.title-page .bots-logo {
+.title-page .postgraphql-logo {
   width: 100%;
 }
 
-.bots-logo.h1 {
+.postgraphql-logo.h1 {
   width: 40%;
   margin-top: 30px;
 }
@@ -241,8 +241,8 @@ pre + pre {
   font-size: 1.4em;
 }
 
-.bots-is {
-  background-image: url('images/bots-bg.png');
+.postgraphql-is {
+  background-image: url('images/postgraphql-bg.png');
 }
 
 .hot-reload {
@@ -253,7 +253,7 @@ pre + pre {
   background-image: url('images/hot-storybook.gif');
 }
 
-.bots-is h1, .bots-is h2, .bots-is h3, .bots-is a {
+.postgraphql-is h1, .postgraphql-is h2, .postgraphql-is h3, .postgraphql-is a {
   color: black;
   text-shadow: 1px 1px 2px white;
 }

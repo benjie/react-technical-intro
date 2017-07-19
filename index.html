@@ -2103,12 +2103,31 @@ class TodoApp extends React.Component {
   state = {items: getInitialItems(),
 *   nextItemText: ''};
   handleDelete = (id) => {...}
+```
+---
 
+class: has-code
+
+```jsx
+class TodoApp extends React.Component {
+  state = {items: getInitialItems(),
+*   nextItemText: ''};
+  handleDelete = (id) => {...}
+      ⁣
+      ⁣
+      ⁣
+      ⁣
+      ⁣
+      ⁣
+      ⁣
+      ⁣
+      ⁣
   render() {
     return (
       <div className='TodoApp'>
         <TodoList items={this.state.items} onDeleteItem={this.handleDelete} />
 *       <input
+      ⁣
 *         value={this.state.nextItemText}
 *         onChange={e => this.setState({nextItemText: e.target.value})}
 *       />
@@ -2126,7 +2145,7 @@ class TodoApp extends React.Component {
   state = {items: getInitialItems(),
     nextItemText: ''};
   handleDelete = (id) => {...}
-  handleKeyPress = (e) => {
+* handleKeyPress = (e) => {
 *   if (e.key === 'Enter') {
 *     this.setState({
 *       items: [].concat(this.state.items,

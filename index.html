@@ -1969,6 +1969,14 @@ class: has-code
 
 ```jsx
 *const TodoItem = ({text, onTrashClick}) => (
+```
+
+---
+
+class: has-code
+
+```jsx
+*const TodoItem = ({text, onTrashClick}) => (
   <div className='TodoItem'>
     <div className='TodoItem__text'>{text}</div>
 *   <div className='TodoItem__trash' onClick={onTrashClick}>X</div>
@@ -1976,6 +1984,44 @@ class: has-code
 );
 ```
 
+---
+
+class: has-code
+
+```jsx
+const TodoItem = ({text, onTrashClick}) => (
+  <div className='TodoItem'>
+    <div className='TodoItem__text'>{text}</div>
+    <div className='TodoItem__trash' onClick={onTrashClick}>X</div>
+  </div>
+);
+*const TodoList = ({items, onDeleteItem}) => (
+```
+---
+
+class: has-code
+
+```jsx
+const TodoItem = ({text, onTrashClick}) => (
+  <div className='TodoItem'>
+    <div className='TodoItem__text'>{text}</div>
+    <div className='TodoItem__trash' onClick={onTrashClick}>X</div>
+  </div>
+);
+*const TodoList = ({items, onDeleteItem}) => (
+  <div className='TodoList'>
+    {items.map(
+      ({text, id}) => (
+      ⁣
+      ⁣
+      ⁣
+      ⁣
+      ⁣
+      )
+    )}
+  </div>
+);
+```
 ---
 
 class: has-code

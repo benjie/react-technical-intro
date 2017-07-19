@@ -2054,7 +2054,7 @@ class: has-code
 ```jsx
 const TodoItem = ({text, onTrashClick}) => (
   // ...  <div ...
-  onClick={onTrashClick}
+          onClick={onTrashClick}
   // ...  >X</div> ...
 );
 const TodoList = ({items, onDeleteItem}) => (
@@ -2062,13 +2062,22 @@ const TodoList = ({items, onDeleteItem}) => (
           onTrashClick={(e) => onDeleteItem(id)}
   // ...  /> ...
 );
+```
+--
+```js
 class TodoApp extends React.Component {
   state = {items: getInitialItems()}
 
+```
+--
+```js
 * handleDelete = (id) => {
 *   this.setState({items: this.state.items.filter(item => item.id !== id)});
   }
 
+```
+--
+```js
   render() {
     return (
       <div className='TodoApp'>

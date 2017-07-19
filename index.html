@@ -19,11 +19,11 @@ class: title-page, blue
 <img src='images/react-logo.png' title='React logo' class='react-logo'>
 </div>
 
-# Technical Introduction to React
+## Technical Introduction to React
 
-Benjie Gillam
+### Benjie Gillam
 
-Freelancer,  
+Freelancer (full-stack JS expert),  
 [PostGraphQL](https://github.com/postgraphql/postgraphql) maintaner
 
 <div class='postgraphql-logo-container'>
@@ -2100,9 +2100,31 @@ class: has-code
 
 ```jsx
 class TodoApp extends React.Component {
-  state = {items: getInitialItems(),
-*   nextItemText: ''};
+  state = {items: getInitialItems()};
+      ⁣
   handleDelete = (id) => {...}
+      ⁣
+      ⁣
+      ⁣
+      ⁣
+      ⁣
+      ⁣
+      ⁣
+      ⁣
+      ⁣
+  render() {
+    return (
+      <div className='TodoApp'>
+        <TodoList items={this.state.items} onDeleteItem={this.handleDelete} />
+      ⁣
+      ⁣
+      ⁣
+      ⁣
+      ⁣
+      </div>
+    );
+  }
+}
 ```
 ---
 

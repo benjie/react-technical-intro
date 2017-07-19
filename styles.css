@@ -128,6 +128,7 @@ h1#react-101 {
 
 .title-page .postgraphql-logo {
   width: 100%;
+  border-radius: 13px;
 }
 
 .postgraphql-logo.h1 {

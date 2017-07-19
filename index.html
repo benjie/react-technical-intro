@@ -2169,9 +2169,74 @@ class TodoApp extends React.Component {
   handleDelete = (id) => {...}
 * handleKeyPress = (e) => {
 *   if (e.key === 'Enter') {
+      ⁣
+      ⁣
+      ⁣
+      ⁣
+      ⁣
+    }
+  },
+  render() {
+    return (
+      <div className='TodoApp'>
+        <TodoList items={this.state.items} onDeleteItem={this.handleDelete} />
+        <input
+*         onKeyPress={this.handleKeyPress}
+          value={this.state.nextItemText}
+          onChange={e => this.setState({nextItemText: e.target.value})}
+        />
+      </div>
+    );
+  }
+}
+```
+
+---
+
+class: has-code
+
+```jsx
+class TodoApp extends React.Component {
+  state = {items: getInitialItems(),
+    nextItemText: ''};
+  handleDelete = (id) => {...}
+  handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
 *     this.setState({
 *       items: [].concat(this.state.items,
 *         {id: newId(), text: this.state.nextItemText}),
+      ⁣
+*     });
+    }
+  },
+  render() {
+    return (
+      <div className='TodoApp'>
+        <TodoList items={this.state.items} onDeleteItem={this.handleDelete} />
+        <input
+          onKeyPress={this.handleKeyPress}
+          value={this.state.nextItemText}
+          onChange={e => this.setState({nextItemText: e.target.value})}
+        />
+      </div>
+    );
+  }
+}
+```
+---
+
+class: has-code
+
+```jsx
+class TodoApp extends React.Component {
+  state = {items: getInitialItems(),
+    nextItemText: ''};
+  handleDelete = (id) => {...}
+  handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      this.setState({
+        items: [].concat(this.state.items,
+          {id: newId(), text: this.state.nextItemText}),
 *       nextItemText: '',
       });
     }
@@ -2181,7 +2246,7 @@ class TodoApp extends React.Component {
       <div className='TodoApp'>
         <TodoList items={this.state.items} onDeleteItem={this.handleDelete} />
         <input
-*         onKeyPress={this.handleKeyPress}
+          onKeyPress={this.handleKeyPress}
           value={this.state.nextItemText}
           onChange={e => this.setState({nextItemText: e.target.value})}
         />

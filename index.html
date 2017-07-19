@@ -885,14 +885,30 @@ class: has-code
 * component: component,
 * props: Object.assign({children: children}, attrs)
 *});
+```
 
+--
+
+```js
 const UserName = ({user}) => dom('span', {}, user.name);
+```
 
+--
+
+```js
 //const LoggedInPage = ({user}) => dom('h1', {}, 'Hello ', UserName({user}), '!');
 *const LoggedInPage = ({user}) => dom('h1', {}, 'Hello ', dom(UserName, {user}), '!')
+```
 
+--
+
+```js
 const LoggedOutPage = () => dom('a', {href: '/login'}, 'Please log in!');
+```
 
+--
+
+```js
 const Page = (props) => (
 //props.user ? LoggedInPage(props) : LoggedOutPage(props)
 * props.user ? dom(LoggedInPage, props) : dom(LoggedOutPage, props)
@@ -904,6 +920,16 @@ const Page = (props) => (
 Note **UserName** and **LoggedOutPage** are unchanged.
 
 ... Okay, so lets have a go at rendering these again
+
+---
+
+class: has-code
+
+# `view = fn(props, state)`
+
+```js
+> Page({user: {name: 'Benjie'}})
+```
 
 ---
 
@@ -1128,9 +1154,16 @@ class: has-code
   props:
    { children:
       [ 'Hello ',
-*       { component: 'span', props: { children: [ 'Benjie' ] } },
+        { component: 'span', props: { children: [ 'Benjie' ] } },
         '!' ] } }
+```
+???
 
+At the top is the virtual DOM tree we had before.
+
+--
+
+```js
 // After
 { component: 'h1',
   props:
@@ -1139,44 +1172,20 @@ class: has-code
 *       { component: 'span', props: { children: [ 'Jof' ] } },
         '!' ] } }
 ```
-
 ???
-
-At the top is the virtual DOM tree we had before.
 
 And at the bottom is the new one...
 
 They're almost identical, but not quite...
 
----
-
-class: has-code
-
-# `view = fn(props, state)`
-
-```js
-// Before
-{ component: 'h1',
-  props:
-   { children:
-      [ 'Hello ',
-*       { component: 'span', props: { children: [ 'Benjie' ] } },
-        '!' ] } }
-
-// After
-{ component: 'h1',
-  props:
-   { children:
-      [ 'Hello ',
-*       { component: 'span', props: { children: [ 'Jof' ] } },
-        '!' ] } }
-```
+--
 
 This is where React's magic comes in.
 
 ???
 
 This is where React's magic comes in... **(PTO!)**
+
 
 ---
 
@@ -1204,6 +1213,19 @@ DOM state into the new one.
 
 And what's more, it does it **without reading the browser DOM** - so no
 read-write-read-write DOM re-layout bottlenecks!
+
+--
+
+.aside[
+
+(See [Reconciliation](http://facebook.github.io/react/docs/reconciliation.html) in their docs for how they changed an O(n<sup>3</sup>) problem to O(n))
+]
+
+???
+
+The state of the art algorithms for generating the minimum number of operations to transform one tree into another have a complexity in the order of O(n3).
+
+By settling on a number of heuristics and compromises, React has turned this into O(n)
 
 
 ---
@@ -1240,26 +1262,40 @@ other things.
 
 `react-dom` - HTML rendering (server and browser)
 
-`react-native` - **iOS and Android** apps using **native views**
+`react-native` - **iOS and Android** apps using **native components**
 
---
+---
 
-.aside[
+class: has-code
 
-(See [Reconciliation](http://facebook.github.io/react/docs/reconciliation.html) in their docs for how they changed an O(n<sup>3</sup>) problem to O(n))
-]
+# `view = fn(props, state)`
 
-???
+And this isn't limited to HTML and the browser! Facebook have split React
+into it's core logic (React) and on top of that you can build a renderer for
+other things.
 
-The state of the art algorithms for generating the minimum number of operations to transform one tree into another have a complexity in the order of O(n3).
+`react-dom` - HTML rendering (server and browser)
 
-By settling on a number of heuristics and compromises, React has turned this into O(n)
+`react-native` - iOS/Android, native components
+
+`react-fs-renderer` - writes to the **filesystem**?!
+
+
 
 ---
 
 class: middle, center, brown
 
 # 4. But doesn't it have that weird syntax?
+
+--
+
+Now's the perfect time for a break...
+
+
+--
+
+Back?
 
 ---
 
@@ -1308,6 +1344,42 @@ We call this new syntax JSX.
 Using JSX is optional - it's just syntactic sugar.
 
 ## Let's take a look...
+
+---
+
+class: has-code
+
+# JSX
+
+```js
+//const LoggedOutPage = () => React.createElement('a', {href: '/login'}, 'Please log in!');
+```
+
+--
+
+Oh, that's a bit long...
+
+--
+
+Let's abbreviate back to using `dom`:
+
+```js
+const dom = React.createElement
+```
+
+---
+
+class: has-code
+
+# JSX
+
+```jsx
+//const LoggedOutPage = () => dom('a', {href: '/login'}, 'Please log in!');
+```
+
+???
+
+That's better!
 
 ---
 
@@ -1364,6 +1436,29 @@ class: has-code
 //const UserName = ({user}) => dom('span', null, user.name);
 * const UserName = ({user}) => (<span>{user.name}</span>);
 ```
+
+---
+
+class: has-code
+
+# JSX
+
+.context[
+```jsx
+//const LoggedOutPage = () => dom('a', {href: '/login'}, 'Please log in!');
+  const LoggedOutPage = () => (<a href="/login">Please log in!</a>);
+```
+```jsx
+//const LoggedInPage = ({user}) => dom('h1', {}, 'Hello ', dom(UserName, {user}), '!
+  const LoggedInPage = ({user}) => (<h1>Hello <UserName user={user} />!</h1>);
+```
+
+```jsx
+//const UserName = ({user}) => dom('span', null, user.name);
+  const UserName = ({user}) => (<span>{user.name}</span>);
+```
+]
+
 ```jsx
 //const Page = (props) => (
 //  props.user
@@ -1405,18 +1500,44 @@ const Page = (props) => (
 So here it all is, nice and tidy. The brackets are optional, but I prefer to
 keep them in.
 
+--
+
+.context[
+```jsx
+const LoggedOutPage = () => dom('a', {href: '/login'}, 'Please log in!');
+
+const LoggedInPage = ({user}) => dom('h1', {}, 'Hello ', dom(UserName, {user}), '!
+
+const UserName = ({user}) => dom('span', null, user.name);
+
+const Page = (props) => (
+  props.user
+  ? LoggedInPage(props)
+  : LoggedOutPage(props)
+);
+```
+]
+
 ---
 
 class: normal
 
 ## JSX vs HTML oddities:
 
+--
+
 Case matters: `onClick` not `onclick`
+
+--
 
 Some attributes are renamed to avoid clashes:  
 `class` → `className`; `for` → `htmlFor`
 
+--
+
 You have to close tags (think XHTML)
+
+--
 
 Be explicit: `<table>`**`<tbody>`**`<tr><td>...`
 
@@ -1530,7 +1651,7 @@ class Countdown extends React.Component {
     const seconds = Math.floor((this.props.date - this.state.currentDate) / 1000);
     return (
       <span>
-        {seconds} seconds remain until {this.props.date.toISOString()}
+        {seconds} seconds remain until {this.props.date.toDateString()}
       </span>
     );
   }
@@ -1569,7 +1690,7 @@ class Countdown extends React.Component {
 *   const seconds = Math.floor((this.props.date - this.state.currentDate) / 1000);
 *   return (
 *     <span>
-*       {seconds} seconds remain until {this.props.date.toISOString()}
+*       {seconds} seconds remain until {this.props.date.toDateString()}
 *     </span>
 *   );
   }
@@ -1604,7 +1725,7 @@ class Countdown extends React.Component {
     const seconds = Math.floor((this.props.date - this.state.currentDate) / 1000);
     return (
       <span>
-        {seconds} seconds remain until {this.props.date.toISOString()}
+        {seconds} seconds remain until {this.props.date.toDateString()}
       </span>
     );
   }
@@ -1638,7 +1759,7 @@ class Countdown extends React.Component {
     const seconds = Math.floor((this.props.date - this.state.currentDate) / 1000);
     return (
       <span>
-        {seconds} seconds remain until {this.props.date.toISOString()}
+        {seconds} seconds remain until {this.props.date.toDateString()}
       </span>
     );
   }
@@ -1668,7 +1789,7 @@ class Countdown extends React.Component {
 *   const seconds = Math.floor((this.props.date - this.state.currentDate) / 1000);
 *   return (
 *     <span>
-*       {seconds} seconds remain until {this.props.date.toISOString()}
+*       {seconds} seconds remain until {this.props.date.toDateString()}
 *     </span>
 *   );
   }
@@ -1698,12 +1819,16 @@ class Countdown extends React.Component {
     const seconds = Math.floor((this.props.date - this.state.currentDate) / 1000);
     return (
       <span>
-        {seconds} seconds remain until {this.props.date.toISOString()}
+        {seconds} seconds remain until {this.props.date.toDateString()}
       </span>
     );
   }
 }
 ```
+
+--
+
+<div id="react2"></div>
 
 ???
 
@@ -2264,6 +2389,32 @@ class: postgraphql-is, cover, middle, center
         }
       });
       ReactDOM.render(React.createElement(HomeView3), $("#react1")[0]);
+      class Countdown extends React.Component {
+        constructor() {
+          super();
+          this.state = {currentDate: new Date()};
+          this.updateTime = () => this.setState({currentDate: new Date()});
+        }
+
+        componentDidMount() {
+          this.timer = setInterval(this.updateTime, 1000);
+        }
+
+        componentWillUnmount() {
+          clearInterval(this.timer);
+        }
+
+        render() {
+          const seconds = Math.floor((this.props.date - this.state.currentDate) / 1000);
+          return React.createElement('p', {style: {color: 'white', marginTop: '-100px', background: 'black', textAlign: 'right', paddingLeft: '30px'}},
+            String(seconds), " seconds remain until ", React.createElement('br'), this.props.date.toDateString()
+          );
+        }
+      }
+        const el = document.getElementById('react2');
+        if (el) {
+          ReactDOM.render(React.createElement(Countdown, {date: new Date(new Date().getUTCFullYear(), 11, 25, 06, 00)}), el);
+        }
     </script>
     <script>
       document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')
